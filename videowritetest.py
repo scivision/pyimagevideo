@@ -17,6 +17,10 @@ fourcc = cv2.cv.FOURCC(*'FFV1')
 #fourcc = cv2.cv.FOURCC(*'IYUV')
 #fourcc = cv2.cv.FOURCC(*'THEO') #must name file .ogv, NOT .avi
 #*** these codecs did NOT work for me on Linux ***
+#fourcc = cv2.cv.FOURCC(*'YV12') # writes file, but file is unreadable "improper image header"
+#fourcc = cv2.cv.FOURCC(*'Y41P') #silent error, no write
+# fourcc = cv2.cv.FOURCC(*'YUV9') #silent error, no write
+#fourcc = cv2.cv.FOURCC(*'DIB ') # silent error, no write
 #fourcc = cv2.cv.FOURCC(*'CVID') #encoder not found
 #fourcc = cv2.cv.FOURCC(*'MJ2C') #segmentation fault
 #********************
