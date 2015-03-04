@@ -108,7 +108,7 @@ def rwlibtiff(x,tdir):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='demo of different TIFF modules read/write with custom user tags')
-    p.add_argument('module',help='module(s) to use: (tifffile, freeimage, libtiff) default: tifffile',nargs='?',type=str,default='tifffile')
+    p.add_argument('module',help='module to use: (tifffile, freeimage, libtiff) default: tifffile',nargs='?',type=str,default='tifffile')
     a=p.parse_args()
     
     y = tiffdemo(a.module)
