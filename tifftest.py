@@ -47,7 +47,9 @@ def rwtifffile(x,tdir):
         tffn = join(tdir,'tifffile.tif'); print('tifffile write ' + tffn)
     
         #write demo
-        tifffile.imsave(tffn,x,compress=6, description='my random data',
+        tifffile.imsave(tffn,x,compress=6, 
+                        photometric='minisblack',
+                        description='my random data',
                         extratags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
                                    (65002,'f',2,[123456.789,9876.54321],True)])
