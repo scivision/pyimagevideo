@@ -17,7 +17,7 @@ numbers in this range."
 
 reference: http://www.digitalpreservation.gov/formats/content/tiff_tags.shtml
 """
-from tempfile import gettempdri
+from tempfile import gettempdir
 from os.path import join
 from numpy import random, uint8
 
