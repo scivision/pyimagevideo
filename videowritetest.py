@@ -7,6 +7,8 @@ Note: the isColor parameter of VideoWriter works on Linux!
 """
 import cv2
 import numpy as np
+from tempfile import gettempdir
+from os.path import join
 
 usecolor = False
 
@@ -24,7 +26,10 @@ fourcc = cv2.cv.FOURCC(*'FFV1')
 #fourcc = cv2.cv.FOURCC(*'CVID') #encoder not found
 #fourcc = cv2.cv.FOURCC(*'MJ2C') #segmentation fault
 #********************
-hv = cv2.VideoWriter('/tmp/test.avi',fourcc,
+ofn = join(gettempdir(),'test.avi')
+print('saving to ' + ofn)
+
+hv = cv2.VideoWriter(ofn,fourcc,
                      fps=3, frameSize=(512,512), isColor=usecolor)
 if not hv.isOpened():
     exit('*** trouble starting video file')
