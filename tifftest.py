@@ -41,7 +41,12 @@ def tiffdemo(modules):
 
 #%% using tifffile
 def rwtifffile(x,tdir):
-    """ uses ZIP compression """
+    """ uses ZIP compression
+    note: using TiffWriter class, you can append write TIFF frame by frame  
+    see source code for more detail, search for 
+    class TiffWriter
+    https://github.com/blink1073/tifffile/blob/master/tifffile.py
+    """
     try:
         import tifffile
         fn = join(tdir,'tifffile.tif'); print('tifffile write ' + fn)
