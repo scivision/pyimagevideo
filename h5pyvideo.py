@@ -5,12 +5,15 @@ That is, you can't append frames.
 Maybe someone has written a clean TIFF function that can append -- I haven't run across it yet.
 
 """
-
+from tempfile import gettempdir
 import h5py
 import numpy as np
+from os.path import join
 
-x = (np.random.rand(10,512,512)*255).astype(np.uint8)
+x = (np.random.rand(10,128,256)*255).astype(np.uint8)
 
-with h5py.File('/tmp/junk.h5','w',libver='latest') as f:
-    dset = f.create_dataset("video", (10,512,512), dtype='uint8')
-    print(dset.dtype)
+
+with h5py.File(join(gettempdir(),'junk.h5'),'w',libver='latest') as f:
+    #dset = f.create_dataset("video", (10,512,512), dtype='uint8')
+    #print(dset.dtype)
+    f.create_dataset('video',data=x)
