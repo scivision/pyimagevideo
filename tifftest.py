@@ -17,7 +17,7 @@ numbers in this range."
 
 reference: http://www.digitalpreservation.gov/formats/content/tiff_tags.shtml
 """
-from tempfile import gettempdir
+from tempfile import gettempdri
 from os.path import join
 from numpy import random, uint8
 
@@ -44,17 +44,17 @@ def rwtifffile(x,tdir):
     """ uses ZIP compression """
     try:
         import tifffile
-        tffn = join(tdir,'tifffile.tif'); print('tifffile write ' + tffn)
+        fn = join(tdir,'tifffile.tif'); print('tifffile write ' + fn)
     
         #write demo
-        tifffile.imsave(tffn,x,compress=6, 
+        tifffile.imsave(fn,x,compress=6, 
                         photometric='minisblack',
                         description='my random data',
                         extratags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
                                    (65002,'f',2,[123456.789,9876.54321],True)])
         #read demo
-        with tifffile.TiffFile(tffn) as tif:
+        with tifffile.TiffFile(fn) as tif:
             y = tif.asarray()
             for page in tif:
                 for tag in page.tags.values():
