@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from os.path import expanduser, join
-from os import listdir
+from os import listdir, remove
 import re
 from glob import glob
 from scipy.ndimage import imread # much better than PIL
@@ -14,7 +14,7 @@ try:
 except ImportError:
     from .image_write_multipage import rwfreeimage
 
-def png2multipage(odir,inext,outext='.tif'):
+def png2multipage(odir,inext,outext='.tif',delete=False):
     odir = expanduser(odir)
     olist = listdir(odir)
 
@@ -35,7 +35,8 @@ def png2multipage(odir,inext,outext='.tif'):
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
         for i,f in enumerate(flist):
             images[i,...]=imresize(imread(f,mode='RGB'),im0.shape)#they are all of slightly different shape
-
+            if delete:
+                remove(f)
         #writeGif(gfn,images,duration=0.1,repeat=True)
         rwfreeimage(images,gfn)
 
