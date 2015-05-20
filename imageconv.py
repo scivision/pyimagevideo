@@ -27,7 +27,10 @@ def png2multipage(odir,inext,outext='.tif'):
 #%% convert these sets of images to multipage image
     for p in pref:
         gfn = join(odir,p+outext)
-        flist = glob(join(odir,p+'*'+outext))
+        flist = glob(join(odir,p+'*'+inext))
+        print(p)
+        print(gfn)
+        print(flist)
         im0 = imread(flist[0],mode='RGB')
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
         for i,f in enumerate(flist):
