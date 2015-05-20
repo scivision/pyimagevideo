@@ -64,7 +64,7 @@ def tiffdemo(modules):
     return y
 
 #%% using tifffile
-def write_multipage_tiff(x,ofn,descr=None,tags=None):
+def write_multipage_tiff(x,ofn,descr='',tags=None):
     """ uses ZIP compression
     writes all frames at once
     note: using TiffWriter class, you can

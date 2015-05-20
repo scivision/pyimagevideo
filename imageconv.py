@@ -6,6 +6,7 @@ from glob import glob
 from scipy.ndimage import imread # much better than PIL
 from scipy.misc import imresize #ditto
 from numpy import empty
+from warnings import warn
 
 #from visvis.vvmovie.images2gif import writeGif #garbage doesn't work correctly, bad GIFs
 
@@ -14,7 +15,7 @@ try: #note tifffile is 20x faster than freeimage
 except ImportError:
     from .image_write_multipage import write_multipage_tiff
 
-def png2multipage(odir,inext,outext='.tif',delete=False):
+def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
     odir = expanduser(odir)
     olist = listdir(odir)
 
@@ -28,18 +29,29 @@ def png2multipage(odir,inext,outext='.tif',delete=False):
     for p in pref:
         gfn = join(odir,p+outext)
         flist = glob(join(odir,p+'*'+inext))
-        print('globbed files {} to put into {}'.format(flist,gfn))
+        flist.sort() #in-place method
+
+        if verbose>0:
+            print('globbed files {} to put into {}'.format(flist,gfn))
         if not flist:
-            print('imageconv: unexpected problem globbing, found no files')
+            warn('unexpected problem globbing, found no files')
             return
-        im0 = imread(flist[0],mode='RGB')
+        try:
+            im0 = imread(flist[0],mode='RGB')
+        except OSError as e:
+            warn('could not read first image {}, returning.  {}'.format(flist[0],e))
+            return
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
         for i,f in enumerate(flist):
-            images[i,...]=imresize(imread(f,mode='RGB'),im0.shape)#they are all of slightly different shape
+            try:
+                images[i,...]=imresize(imread(f,mode='RGB'),im0.shape)#they are all of slightly different shape
+            except OSError as e:
+                warn('skipping {} due to {}'.format(f,e))
+                continue
             if delete:
                 remove(f)
         #writeGif(gfn,images,duration=0.1,repeat=True)
-        write_multipage_tiff(images,gfn)
+        write_multipage_tiff(images,gfn,descr=descr)
 
 
 
@@ -54,7 +66,9 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='takes directory of sequential PNG plots and makes an animated GIF')
     p.add_argument('odir',help='directory with lots of PNGS',type=str)
-    p.add_argument('--ext',help='file extension',type=str,default='.png')
+    p.add_argument('--inext',help='read file extension',default='.png')
+    p.add_argument('--outext',help='write file extension',default='.tif')
+    p.add_argument('-v','--verbose',help='debug msg',action='store_true')
     p = p.parse_args()
 
-    tlist = png2multipage(p.odir,p.ext)
+    tlist = png2multipage(p.odir,p.inext,p.outext,'',False,p.verbose)
