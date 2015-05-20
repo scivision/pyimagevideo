@@ -27,7 +27,7 @@ def png2gif(odir,ext):
     pref = [f.split('_t')[0] for f in tlist]
 #%% convert these sets of images to antimated gif
     for p in pref:
-        gfn = join(odir,p+'.tif')
+        gfn = join(odir,p+ext)
         flist = glob(join(odir,p+'*'+ext))
         im0 = imread(flist[0],mode='RGB')
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
