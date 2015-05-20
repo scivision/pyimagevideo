@@ -14,21 +14,20 @@ try:
 except ImportError:
     from .image_write_multipage import rwfreeimage
 
-def png2gif(odir,ext):
+def png2multipage(odir,inext,outext='.tif'):
     odir = expanduser(odir)
-    #png to gif
     olist = listdir(odir)
 
     # let's get the "first" file for each filetype
-    pat ='.*_t0+\\'+ext+'$'
+    pat ='.*_t0+\\'+inext+'$'
     print('using regex {}'.format(pat))
     tlist = filterPick(olist,pat)
     #extract the prefixes for these files
     pref = [f.split('_t')[0] for f in tlist]
-#%% convert these sets of images to antimated gif
+#%% convert these sets of images to multipage image
     for p in pref:
-        gfn = join(odir,p+ext)
-        flist = glob(join(odir,p+'*'+ext))
+        gfn = join(odir,p+outext)
+        flist = glob(join(odir,p+'*'+outext))
         im0 = imread(flist[0],mode='RGB')
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
         for i,f in enumerate(flist):
@@ -53,4 +52,4 @@ if __name__ == '__main__':
     p.add_argument('--ext',help='file extension',type=str,default='.png')
     p = p.parse_args()
 
-    tlist = png2gif(p.odir,p.ext)
+    tlist = png2multipage(p.odir,p.ext)
