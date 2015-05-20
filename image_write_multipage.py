@@ -27,104 +27,103 @@ def tiffdemo(modules):
     tdir = gettempdir()
 #%% generate synthetic multiframe image
     x = (random.rand(nframe,512,512)*255).astype(uint8)
-    
+
     if 'tifffile' in modules:
-        y = rwtifffile(x,tdir)
-        
+        y = rwtifffile(x,join(tdir,'tifffile.tif'))
+
     if 'freeimage' in modules:
-        y = rwfreeimage(x,tdir)
-    
+        y = rwfreeimage(x,join(tdir,'freeimage.tif'))
+
     if 'libtiff' in modules:
-        y = rwlibtiff(x,tdir)
-        
+        y = rwlibtiff(x,join(tdir,'testlibtiff.tif'))
+
     return y
 
 #%% using tifffile
-def rwtifffile(x,tdir):
+def rwtifffile(x,ofn):
     """ uses ZIP compression
-    note: using TiffWriter class, you can append write TIFF frame by frame  
-    see source code for more detail, search for 
+    note: using TiffWriter class, you can append write TIFF frame by frame
+    see source code for more detail, search for
     class TiffWriter
     https://github.com/blink1073/tifffile/blob/master/tifffile.py
     """
     try:
         import tifffile
-        fn = join(tdir,'tifffile.tif'); print('tifffile write ' + fn)
-    
+        print('tifffile write ' + ofn)
+
         #write demo
-        tifffile.imsave(fn,x,compress=6, 
+        tifffile.imsave(ofn,x,compress=6,
                         photometric='minisblack',
                         description='my random data',
                         extratags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
                                    (65002,'f',2,[123456.789,9876.54321],True)])
         #read demo
-        with tifffile.TiffFile(fn) as tif:
+        with tifffile.TiffFile(ofn) as tif:
             y = tif.asarray()
             for page in tif:
                 for tag in page.tags.values():
                     t = tag.name, tag.value
                     if tag.name in ('65000','65001','65002'):
                         print(t)
-        
+
     except Exception as e:
         print('tifffile had a problem: ' + str(e))
         #raise
     return y
-    
+
 #%% demo writing TIFF using scikit-image and free image
-def rwfreeimage(x,tdir):
+def rwfreeimage(x,ofn):
     """ on my setup, uses LZW compression """
     try:
         from skimage.io._plugins import freeimage_plugin as freeimg
         from skimage.io import imread as skimread
-        fn = join(tdir,'freeimage.tif'); print('freeimage write ' + fn)
-        
-        #write demo (no tags)        
-        freeimg.write_multipage(x, fn)
-        
+        print('freeimage write ' + ofn)
+
+        #write demo (no tags)
+        freeimg.write_multipage(x, ofn)
+
         #read demo (no tags)
-        return skimread(fn)
+        return skimread(ofn)
     except Exception as e:
         print('freeimage had a problem: '+str(e))
         print('https://scivision.co/writing-multipage-tiff-with-python/')
-    
+
 #%% using libtiff
-def rwlibtiff(x,tdir):
+def rwlibtiff(x,fn):
     """ I get an error "no module name libtiff"""
     try:
         from libtiff import TIFFimage, TIFF
         with TIFFimage(x,description='my test data') as tf:
-            fn = join(tdir,'.tif'); print('libtiff write ' + fn)
-            
+            print('libtiff write ' + fn)
+
             #write demo
             tf.write_file(fn, compression='none')
-            
-        #read demo  
+
+        #read demo
         with TIFF.open(fn,mode='r') as tif:
-            
+
             y = tif.read_image()
             # for image in tif.iter_images():
     except Exception as e:
         print('libtiff had a problem: ' + str(e))
-        #raise
-    
-    return y    
-    
+
+    return y
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='demo of different TIFF modules read/write with custom user tags')
     p.add_argument('module',help='module to use: (tifffile, freeimage, libtiff) default: tifffile',nargs='?',type=str,default='tifffile')
     a=p.parse_args()
-    
+
     y = tiffdemo(a.module)
-    
+
     try:
         print(y.shape)
         from matplotlib.pyplot import figure,show
         ax = figure().gca()
         ax.imshow(y[0,...])
-        show()        
+        show()
     except Exception as e:
         print(e)
         print('could not plot result, sorry')
