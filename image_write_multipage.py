@@ -26,7 +26,7 @@ def tiffdemo(modules):
     nframe=10
     tdir = gettempdir()
 #%% generate synthetic multiframe image
-    x = (random.rand(nframe,512,512)*255).astype(uint8)
+    x = (random.rand(nframe,512,512,3)*255).astype(uint8)
 
     if 'tifffile' in modules:
         y = rwtifffile(x,join(tdir,'tifffile.tif'))
@@ -53,7 +53,7 @@ def rwtifffile(x,ofn):
 
         #write demo
         tifffile.imsave(ofn,x,compress=6,
-                        photometric='minisblack',
+                        #photometric='minisblack', #not for color
                         description='my random data',
                         extratags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
@@ -73,6 +73,7 @@ def rwtifffile(x,ofn):
 
 #%% demo writing TIFF using scikit-image and free image
 def rwfreeimage(x,ofn):
+    print(x.shape)
     """ on my setup, uses LZW compression """
     try:
         from skimage.io._plugins import freeimage_plugin as freeimg
@@ -110,10 +111,10 @@ def rwlibtiff(x,fn):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='demo of different TIFF modules read/write with custom user tags')
-    p.add_argument('module',help='module to use: (tifffile, freeimage, libtiff) default: tifffile',nargs='?',type=str,default='tifffile')
-    a=p.parse_args()
+    p.add_argument('module',help='module to use: (tifffile, freeimage, libtiff) default: tifffile',nargs='?',default=('tifffile','freeimage'))
+    p=p.parse_args()
 
-    y = tiffdemo(a.module)
+    y = tiffdemo(p.module)
 
     try:
         print(y.shape)
