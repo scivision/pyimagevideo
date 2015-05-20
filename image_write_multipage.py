@@ -84,11 +84,9 @@ def rwfreeimage(x,tdir):
         freeimg.write_multipage(x, fn)
         
         #read demo (no tags)
-        y = skimread(fn)
+        return skimread(fn)
     except Exception as e:
         print('freeimage had a problem: '+str(e))
-        
-    return y     
     
 #%% using libtiff
 def rwlibtiff(x,tdir):
