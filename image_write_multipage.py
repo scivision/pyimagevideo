@@ -66,11 +66,10 @@ def rwtifffile(x,ofn):
                     t = tag.name, tag.value
                     if tag.name in ('65000','65001','65002'):
                         print(t)
-
+        return y
     except Exception as e:
         print('tifffile had a problem: ' + str(e))
-        #raise
-    return y
+
 
 #%% demo writing TIFF using scikit-image and free image
 def rwfreeimage(x,ofn):
@@ -103,12 +102,10 @@ def rwlibtiff(x,fn):
         #read demo
         with TIFF.open(fn,mode='r') as tif:
 
-            y = tif.read_image()
+            return tif.read_image()
             # for image in tif.iter_images():
     except Exception as e:
         print('libtiff had a problem: ' + str(e))
-
-    return y
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
