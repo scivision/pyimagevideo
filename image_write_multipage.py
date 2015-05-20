@@ -87,6 +87,7 @@ def rwfreeimage(x,tdir):
         return skimread(fn)
     except Exception as e:
         print('freeimage had a problem: '+str(e))
+        print('https://scivision.co/writing-multipage-tiff-with-python/')
     
 #%% using libtiff
 def rwlibtiff(x,tdir):
