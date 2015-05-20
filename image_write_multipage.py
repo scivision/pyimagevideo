@@ -64,7 +64,7 @@ def tiffdemo(modules):
     return y
 
 #%% using tifffile
-def write_multipage_tiff(x,ofn,descr='',tags=None,verbose=0):
+def write_multipage_tiff(x,ofn,descr=None,tags=(),verbose=0):
     """ uses ZIP compression
     writes all frames at once
     note: using TiffWriter class, you can
@@ -74,7 +74,6 @@ def write_multipage_tiff(x,ofn,descr='',tags=None,verbose=0):
     class TiffWriter
     https://github.com/blink1073/tifffile/blob/master/tifffile.py
     """
-    if descr is None: descr='' #tifffile doesn't want None here
     if verbose>0: print('write_mulitpage_tiff: description to write: {}'.format(descr))
 
     try:
