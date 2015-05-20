@@ -28,9 +28,9 @@ def png2multipage(odir,inext,outext='.tif'):
     for p in pref:
         gfn = join(odir,p+outext)
         flist = glob(join(odir,p+'*'+inext))
-        print(p)
-        print(gfn)
-        print(flist)
+        if not flist:
+            print('imageconv: unexpected problem globbing, found no files')
+            return
         im0 = imread(flist[0],mode='RGB')
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
         for i,f in enumerate(flist):
