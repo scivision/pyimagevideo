@@ -51,7 +51,7 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
             if delete:
                 remove(f)
         #writeGif(gfn,images,duration=0.1,repeat=True)
-        write_multipage_tiff(images,gfn,descr=descr)
+        write_multipage_tiff(images,gfn,descr=descr,verbose=verbose)
 
 
 
