@@ -9,10 +9,10 @@ from numpy import empty
 
 #from visvis.vvmovie.images2gif import writeGif #garbage doesn't work correctly, bad GIFs
 
-try:
-    from image_write_multipage import rwfreeimage
+try: #note tifffile is 20x faster than freeimage
+    from image_write_multipage import write_multipage_tiff
 except ImportError:
-    from .image_write_multipage import rwfreeimage
+    from .image_write_multipage import write_multipage_tiff
 
 def png2multipage(odir,inext,outext='.tif',delete=False):
     odir = expanduser(odir)
@@ -28,6 +28,7 @@ def png2multipage(odir,inext,outext='.tif',delete=False):
     for p in pref:
         gfn = join(odir,p+outext)
         flist = glob(join(odir,p+'*'+inext))
+        print('globbed files {} to put into {}'.format(flist,gfn))
         if not flist:
             print('imageconv: unexpected problem globbing, found no files')
             return
@@ -38,7 +39,7 @@ def png2multipage(odir,inext,outext='.tif',delete=False):
             if delete:
                 remove(f)
         #writeGif(gfn,images,duration=0.1,repeat=True)
-        rwfreeimage(images,gfn)
+        write_multipage_tiff(images,gfn)
 
 
 
