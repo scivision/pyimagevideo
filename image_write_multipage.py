@@ -20,6 +20,11 @@ reference: http://www.digitalpreservation.gov/formats/content/tiff_tags.shtml
 from tempfile import gettempdir
 from os.path import join
 from numpy import random, uint8
+try:
+    from skimage.io._plugins import freeimage_plugin as freeimg
+    from skimage.io import imread as skimread
+except ImportError as e:
+    print(e)
 
 def tiffdemo(modules):
 #%% test parameters
@@ -32,7 +37,9 @@ def tiffdemo(modules):
         y = rwtifffile(x,join(tdir,'tifffile.tif'))
 
     if 'freeimage' in modules:
-        y = rwfreeimage(x,join(tdir,'freeimage.tif'))
+        ofn = join(tdir,'freeimage.tif')
+        rwfreeimage(x,ofn)
+        y = skimread(ofn)
 
     if 'libtiff' in modules:
         y = rwlibtiff(x,join(tdir,'testlibtiff.tif'))
@@ -69,26 +76,16 @@ def rwtifffile(x,ofn):
         return y
     except Exception as e:
         print('tifffile had a problem: ' + str(e))
-
-
 #%% demo writing TIFF using scikit-image and free image
 def rwfreeimage(x,ofn):
-    print(x.shape)
     """ on my setup, uses LZW compression """
     try:
-        from skimage.io._plugins import freeimage_plugin as freeimg
-        from skimage.io import imread as skimread
-        print('freeimage write ' + ofn)
-
+        print('freeimage write {}   shape {}'.format(ofn,x.shape))
         #write demo (no tags)
         freeimg.write_multipage(x, ofn)
-
-        #read demo (no tags)
-        return skimread(ofn)
     except Exception as e:
         print('freeimage had a problem: '+str(e))
         print('https://scivision.co/writing-multipage-tiff-with-python/')
-
 #%% using libtiff
 def rwlibtiff(x,fn):
     """ I get an error "no module name libtiff"""
