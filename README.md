@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/scienceopen/pyimagevideo/badges/gpa.svg)](https://codeclimate.com/github/scienceopen/pyimagevideo)
+
 # python-test-functions
 Functions to test various packages installed.
 
