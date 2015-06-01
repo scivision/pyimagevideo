@@ -25,8 +25,9 @@ from time import time
 try:
     from skimage.io._plugins import freeimage_plugin as freeimg
     from skimage.io import imread as skimread
-except ImportError as e:
+except (ImportError,RuntimeError) as e:
     print(e)
+    
 try:
     import tifffile
 except ImportError as e:
