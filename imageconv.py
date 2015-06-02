@@ -25,6 +25,7 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
     tlist = filterPick(olist,pat)
     #extract the prefixes for these files
     pref = [f.split('_t')[0] for f in tlist]
+    if verbose>0: print('{} files found in {}'.format(len(pref),odir))
 #%% convert these sets of images to multipage image
     for p in pref:
         gfn = join(odir,p+outext)
@@ -65,10 +66,10 @@ def filterPick(lines, regex):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='takes directory of sequential PNG plots and makes an animated GIF')
-    p.add_argument('odir',help='directory with lots of PNGS',type=str)
+    p.add_argument('odir',help='directory with lots of PNGS')
     p.add_argument('--inext',help='read file extension',default='.png')
     p.add_argument('--outext',help='write file extension',default='.tif')
-    p.add_argument('-v','--verbose',help='debug msg',action='store_true')
+    p.add_argument('-v','--verbose',help='debug msg',action='count',default=0)
     p = p.parse_args()
 
     tlist = png2multipage(p.odir,p.inext,p.outext,'',False,p.verbose)
