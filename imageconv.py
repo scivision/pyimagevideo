@@ -23,7 +23,7 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
     pat ='.*_t0+\\'+inext+'$'
     if verbose>0: print('using regex {}'.format(pat))
     tlist = filterPick(olist,pat)
-    if verbose>0: print('{} file types found in {}'.format(len(tlist),odir)})
+    if verbose>0: print('{} file types found in {}'.format(len(tlist),odir))
     #extract the prefixes for these files
     pref = [f.split('_t')[0] for f in tlist]
     if verbose>0: print('{}   <-- file types found in {}'.format(pref,odir))
