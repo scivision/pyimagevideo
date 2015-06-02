@@ -20,7 +20,7 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
     olist = listdir(odir)
 
     # let's get the "first" file for each filetype
-    pat ='.*_t0+\\'+inext+'$'
+    pat ='.*_t\d+\\'+inext+'$'
     if verbose>0: print('using regex {}'.format(pat))
     tlist = filterPick(olist,pat)
     if verbose>0: print('{} file types found in {}'.format(len(tlist),odir))
