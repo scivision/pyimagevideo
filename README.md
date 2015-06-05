@@ -1,7 +1,7 @@
 [![Code Climate](https://codeclimate.com/github/scienceopen/pyimagevideo/badges/gpa.svg)](https://codeclimate.com/github/scienceopen/pyimagevideo)
 
-# python-test-functions
-Functions to test various packages installed.
+# pyimagevideo
+Functions to write multipage images and make videos from Numpy arrays.
 
 You'll need [libfreeimage](https://scivision.co/writing-multipage-tiff-with-python/)
 
