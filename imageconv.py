@@ -16,6 +16,8 @@ except ImportError:
     from .image_write_multipage import write_multipage_tiff
 
 def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
+    if odir is None:
+        return
     odir = expanduser(odir)
     olist = listdir(odir)
 
