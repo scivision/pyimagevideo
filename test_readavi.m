@@ -13,7 +13,7 @@
 
 function test_readavi()
 
-fn = '~/CMOS_110302_0819.avi'; % uncompressed AVI "works for me" with Matlab R2015a on Linux
+fn = '~/U/eng_research_irs/Auroral_Video/X1387_032307_112005.36_short_30fps.avi'; % uncompressed AVI "works for me" with Matlab R2015a on Linux
 showFirstFrame(fn)
 end
 
@@ -25,7 +25,9 @@ end
 vid = VideoReader(fn);
 disp(get(vid)) % print out everything known about this file
 img = readFrame(vid);
-figure()
+f=figure(); ax=axes('parent',f);
 imagesc(img)
-title(fn,'interpreter','none')
+colormap(ax,'gray')
+colorbar('peer',ax)
+title(fn,'interpreter','none','fontsize',10)
 end
