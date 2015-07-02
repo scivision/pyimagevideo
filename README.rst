@@ -9,7 +9,7 @@ pyimagevideo
 Functions to write multipage images and make videos from Numpy arrays.
 Also functions to test Matlab and Python codecs
 
-If you get errors about `libfreeimage. here's how to fix them. <https://scivision.co/writing-multipage-tiff-with-python/>`_
+If you get errors about `libfreeimage, here's how to fix them. <https://scivision.co/writing-multipage-tiff-with-python/>`_
 
 ``image_write_multipage.py`` demonstration of writing multipage TIFF from Numpy arrays, using tifffile and freeimage (tifffile is 20x faster and much more featureful)
 
