@@ -19,7 +19,11 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False,verbose=0):
     if odir is None:
         return
     odir = expanduser(odir)
-    olist = listdir(odir)
+    try:
+        olist = listdir(odir)
+    except OSError as e:
+        warn(str(e))
+        return
 
     # let's get the "first" file for each filetype
     pat ='.*_t\d+\\'+inext+'$'
