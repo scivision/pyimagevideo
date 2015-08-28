@@ -12,22 +12,73 @@
 % Note: uncompressed AVI file can be 20 times filesize of Cinepak AVI
 
 function test_readavi()
+close('all')
+fn1 = '~/Auroral_Video/CMOS_110301_0911_raw.avi'; 
+fn2 = '~/Auroral_Video/CMOS_110302_0819_raw.avi';
+% get ready to read
+vid = setupavi(fn1);
+img1 = readimg(vid,1:100);
+vid = setupavi(fn2);
+img2 = readimg(vid,599);
+% display
+dispvid(img1,fn1), dispvid(img2,fn2)
+% threshold
+mask = thresmax(img1,img2);
+dispvid(mask,'mask')
 
-fn = '~/U/eng_research_irs/Auroral_Video/X1387_032307_112005.36_short_30fps.avi'; % uncompressed AVI "works for me" with Matlab R2015a on Linux
-showFirstFrame(fn)
+filt = img1;
+filt(mask) = 0;
+
+imwrite(filt,'~/Auroral_Video/cal_2011-03-01_0911.png')
+
 end
 
-function showFirstFrame(fn)
-if ~exist(fn,'file')
-    disp([fn,' does not exist'])
-    return
+function thres = thresmax(I1,I2)
+%keeps only pixels above a threshold
+% using 246 b/c due to compression artifacts some ticks are <255
+thr = 120;
+thres = I1(:,:,1)>thr & I2(:,:,1)>thr; %TODO only using one channel
 end
-vid = VideoReader(fn);
+
+function img = readimg(vid,frm)
 disp(get(vid)) % print out everything known about this file
-img = readFrame(vid);
+
+j=1;
+for i=frm
+imc = read(vid,i);
+im = imc(:,:,1);%mean(imc,3,'double');
+img(:,:,j) = im(70:802,300:950); %first(70:802,177:1114,1);
+j= j+1; 
+end
+
+if ndims(img)==3
+    img = mean(img,3,'native'); 
+end
+end
+
+function dispvid(img,ttxt)
+
 f=figure(); ax=axes('parent',f);
 imagesc(img)
 colormap(ax,'gray')
 colorbar('peer',ax)
-title(fn,'interpreter','none','fontsize',10)
+title(ttxt,'interpreter','none','fontsize',10)
+
+
+
+end
+
+function vid =  setupavi(fn)
+if ~exist(fn,'file')
+    disp([fn,' does not exist'])
+    return
+end
+
+try
+    vid = VideoReader(fn);
+catch exc
+    disp(exc.message)
+    disp(['sorry, I couldnt read ',fn,'  maybe I dont have the right codec.'])
+    return
+end
 end
