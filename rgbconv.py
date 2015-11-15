@@ -6,9 +6,10 @@ Michael Hirsch
 from tempfile import gettempdir
 from os.path import join
 from six.moves.urllib.request import urlretrieve
+from six import PY2
 from scipy.ndimage import imread
 from matplotlib.pyplot import subplots,show
-from numpy import rollaxis
+if PY2: FileNotFoundError=IOError
 
 url='http://1zelda.com/tv/pics/rgb_test.jpg'
 fn = 'rgb.jpg'
@@ -17,7 +18,7 @@ def loadimg(url,fn):
     fn = join(gettempdir(),fn)
     try:
         img = imread(fn)
-    except OSError:
+    except FileNotFoundError:
         #download (any) RGB test image. This one is red,green, blue from top to bottom
         urlretrieve(url,fn)
         img = imread(fn)

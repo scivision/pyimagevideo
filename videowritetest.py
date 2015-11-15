@@ -44,7 +44,7 @@ print('saving to ' + ofn)
 
 hv = cv2.VideoWriter(ofn,cc4, fps=5, frameSize=(xpix,ypix), isColor=usecolor)
 
-if not hv.isOpened():
+if not hv or not hv.isOpened():
     raise TypeError('trouble starting video file')
 
 if usecolor:

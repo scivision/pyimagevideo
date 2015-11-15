@@ -2,22 +2,23 @@
 """
 read an AVI and do LBP on it
 """
+from pathlib2 import Path
 import cv2 #used to read AVI and for high-speed display
 from skimage.feature import local_binary_pattern
-from warnings import warn
 #
-from getaviprop import getaviprop
+#from cvutils.getaviprop import getaviprop
 
 def demoLBP(fn):
+    fn = Path(fn).expanduser()
+    vid = cv2.VideoCapture(str(fn))
+#    vidparam = getaviprop(vid)
 
-    vid = cv2.VideoCapture(fn)
-    nframe,xpix,ypix,fps,codec = getaviprop(vid)
-
-    for i in range(nframe):
+    while True:
         ret,img = vid.read()
         if not ret:
-            warn('problem reading {}'.format(fn))
             break
+        if img.ndim==3:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         lbp = local_binary_pattern(img,8,3,'default')
         cv2.imshow('lbp',lbp)
         cv2.waitKey(delay=1)
