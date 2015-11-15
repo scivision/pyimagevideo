@@ -17,4 +17,3 @@ If you get errors about `libfreeimage, here's how to fix them. <https://scivisio
 
 ``videowritetest.py`` demonstrates using OpenCV to write video, with a lot of codecs to try.
 
-``diric.py`` implementation of Direchlet function in Python, demonstrating optional Numba

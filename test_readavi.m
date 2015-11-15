@@ -11,17 +11,12 @@
 %
 % Note: uncompressed AVI file can be 20 times filesize of Cinepak AVI
 
-function test_readavi()
-close('all')
-fn1 = '~/Auroral_Video/CMOS_110301_0911_raw.avi'; 
-fn2 = '~/Auroral_Video/CMOS_110302_0819_raw.avi';
+function test_readavi(vidfn)
 % get ready to read
 vid = setupavi(fn1);
-img1 = readimg(vid,1:100);
-vid = setupavi(fn2);
-img2 = readimg(vid,599);
+img1 = readimg(vidfn);
 % display
-dispvid(img1,fn1), dispvid(img2,fn2)
+dispvid(img1,fn1)
 % threshold
 mask = thresmax(img1,img2);
 dispvid(mask,'mask')
@@ -29,7 +24,7 @@ dispvid(mask,'mask')
 filt = img1;
 filt(mask) = 0;
 
-imwrite(filt,'~/Auroral_Video/cal_2011-03-01_0911.png')
+%imwrite(filt,'test.png')
 
 end
 
