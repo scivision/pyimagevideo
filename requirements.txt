@@ -1,3 +1,4 @@
+setuptools
+six
 numpy
 scikit-image
-tifffile
