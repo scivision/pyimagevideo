@@ -8,6 +8,13 @@ $ python Demo_FPS_matplotlib_image.py
 matplotlib 1.5.0 average FPS 16.55  over 100 frames.
 OpenCV 3.0.0-dev average FPS 639.81  over 100 frames.
 
+Caveats:
+1) I compiled my OpenCV 3.0 with OpenCL--it's possible imshow is using the GPU on my laptop (not sure if imshow uses the GPU)
+2) This is an average measurement, so it doesn't capture bogdowns in the frame rate.
+3) you must normalize your data on a [0,255] range for cv2.imshow
+
+It's just a very simple comparison, showing OpenCV's huge FPS advantage
+
 """
 from numpy import uint8
 from numpy.random import rand
