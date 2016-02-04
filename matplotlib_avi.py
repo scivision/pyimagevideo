@@ -17,14 +17,14 @@ fn = mkstemp(suffix='.avi')[1]
 Writer = anim.writers['ffmpeg']
 writer = Writer(fps=15, codec='ffv1')
 #%% random image setup
-imsize = (256,256)
-Nframe = 50
+imsize = (128,128)
+Nframe = 20
 #%% boilerplate for making imshow priming (used in any program)
 fg = figure()
 ax = fg.gca()
 hi = ax.imshow(uniform(size=imsize))
 #%% add writer context and grabframe to typical imshow loop
-with writer.saving(fg, fn,150):
+with writer.saving(fg, fn,100):
     print('writing {}'.format(fn))
     for _ in range(50):
         hi.set_data(uniform(size=imsize))
