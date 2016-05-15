@@ -18,8 +18,6 @@ numbers in this range."
 
 reference: http://www.digitalpreservation.gov/formats/content/tiff_tags.shtml
 """
-from __future__ import division,absolute_import
-from pathlib2 import Path
 import logging
 from tempfile import gettempdir
 from numpy import random, uint8
@@ -35,7 +33,7 @@ import tifffile
 def tiffdemo(modules):
 #%% test parameters
     nframe=10
-    tdir = Path(gettempdir())
+    tdir = gettempdir()
 #%% generate synthetic multiframe image
     x = (random.rand(nframe,512,512,3)*255).astype(uint8)
 

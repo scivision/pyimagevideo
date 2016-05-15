@@ -2,7 +2,7 @@
 """
 read an AVI and do LBP on it
 """
-from pathlib2 import Path
+from pathlib import Path
 import cv2 #used to read AVI and for high-speed display
 from skimage.feature import local_binary_pattern
 #
