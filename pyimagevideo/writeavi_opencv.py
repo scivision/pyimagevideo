@@ -1,4 +1,3 @@
-from os.path import abspath
 from cv2 import VideoWriter
 try:
     from cv2.cv import FOURCC as fourcc #Windows needs from cv2.cv
@@ -16,12 +15,11 @@ def videoWriter(ofn,fourcccode:str,xypix:tuple, usecolor:bool):
     """
     cc4 = fourcc(*fourcccode)
 
-    ofn = abspath(ofn)
-    print('saving to {}'.format(ofn))
+    print('saving to {} with {}'.format(ofn,cc4))
 
     hv = VideoWriter(ofn,cc4, fps=5, frameSize=xypix, isColor=usecolor)
 
     if not hv or not hv.isOpened():
-        raise TypeError('trouble starting video {}'.format(ofn))
+        raise RuntimeError('trouble starting video {}'.format(ofn))
 
     return hv

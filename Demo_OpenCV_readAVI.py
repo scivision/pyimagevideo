@@ -10,19 +10,17 @@ from pyimagevideo import Path
 #
 try:
     from cvutils.getaviprop import getaviprop
-except:
+except ImportError:
     pass
 
 def testreadavi(fn):
     fn = Path(fn).expanduser()
     vid = cv2.VideoCapture(str(fn))
-    if not vid or not vid.isOpened():
-        raise TypeError('could not open {}'.format(fn))
 
     try:
         vparam = getaviprop(vid)
         print(vparam)
-    except:
+    except Exception:
         pass
 
     while True:
@@ -30,7 +28,7 @@ def testreadavi(fn):
         if not ret: #end of file
             break
 #%% show video with OpenCV
-        cv2.imshow('fig1',img) #expects BGR
+        cv2.imshow(str(fn),img) #expects BGR
         cv2.waitKey(delay=1) #this line is necessary to make the image actually be drawn
 #%% cleanup
     vid.release()
