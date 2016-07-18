@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-from __future__ import division,absolute_import
-#
+#!/usr/bin/env python
+
 from pyimagevideo.imagemultipage import png2multipage
 
 if __name__ == '__main__':

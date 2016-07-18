@@ -4,7 +4,7 @@ from setuptools import setup
 import subprocess
 
 try:
-    subprocess.call(['conda','install','--file','requirements.txt'],shell=False) #don't use os.environ
+    subprocess.call(['conda','install','--file','requirements.txt'])
 except Exception as e:
     pass
 
@@ -13,5 +13,5 @@ setup(name='pyimagevideo',
 	  author='Michael Hirsch',
 	  url='https://github.com/scienceopen/pyimagevideo',
            packages=['pyimagevideo'],
-      install_requires=['tifffile'],
+      install_requires=['tifffile','pathlib2'],
 	  )

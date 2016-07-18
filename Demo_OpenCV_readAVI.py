@@ -6,7 +6,7 @@ tested with OpenCV 2.4
 Michael Hirsch
 """
 import cv2
-from pathlib2 import Path
+from pyimagevideo import Path
 #
 try:
     from cvutils.getaviprop import getaviprop
