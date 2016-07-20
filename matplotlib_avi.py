@@ -1,11 +1,9 @@
 """
-example
-writing matplotlib movies with matlab "grabframe"-like syntax
-Michael hirsch
+example writing matplotlib movies with matlab "grabframe"-like syntax
 
 Just four lines of code to directly write lossless AVIs from Matplotlib
+lines 22-24,29 are all that's needed.
 """
-
 from matplotlib.pyplot import figure,draw,pause
 import matplotlib.animation as anim
 from tempfile import mkstemp
@@ -13,9 +11,6 @@ from numpy.random import uniform
 
 fn = mkstemp(suffix='.avi')[1]
 
-# Set up formatting for the movie files
-Writer = anim.writers['ffmpeg']
-writer = Writer(fps=15, codec='ffv1')
 #%% random image setup
 imsize = (128,128)
 Nframe = 20
@@ -24,6 +19,8 @@ fg = figure()
 ax = fg.gca()
 hi = ax.imshow(uniform(size=imsize))
 #%% add writer context and grabframe to typical imshow loop
+Writer = anim.writers['ffmpeg']
+writer = Writer(fps=15, codec='ffv1')
 with writer.saving(fg, fn,100):
     print('writing {}'.format(fn))
     for _ in range(50):
