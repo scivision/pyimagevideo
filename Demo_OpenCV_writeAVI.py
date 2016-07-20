@@ -7,7 +7,6 @@ Note: the isColor parameter of VideoWriter works on Linux!
 """
 import numpy as np
 from tempfile import mkstemp
-from pyimagevideo import Path
 #
 from pyimagevideo.writeavi_opencv import videoWriter
 
@@ -37,7 +36,8 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJ2C' #segmentation fault -- 15.04 blank video
 """
 #%% generate noise signal
-ofn = mkstemp(ext)[1]
+ofn = mkstemp(ext,'opencv_lossless')[1]
+
 if usecolor:
     vdim = np.random.rand(nframe,ypix,xpix,3)
 else:
