@@ -9,7 +9,7 @@ import matplotlib.animation as anim
 from tempfile import mkstemp
 from numpy.random import uniform
 
-fn = mkstemp(suffix='.avi')[1]
+fn = mkstemp('.avi','lossless')[1]
 
 #%% random image setup
 imsize = (128,128)
