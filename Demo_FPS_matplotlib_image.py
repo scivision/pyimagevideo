@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 demo of measuring FPS performance with Matplotlib and OpenCV
 i.e. how fast can I update an image plot

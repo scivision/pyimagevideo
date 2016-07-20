@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 read an AVI and do LBP on it
 """
-from pathlib import Path
+from pyimagevideo import Path
 import cv2 #used to read AVI and for high-speed display
 from skimage.feature import local_binary_pattern
 #

@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 demonstrate RGB,BGR, etc. conversions
 Michael Hirsch
 """
-from tempfile import gettempdir
-from os.path import join
+from tempfile import mkstemp
 from six.moves.urllib.request import urlretrieve
 from six import PY2
 from scipy.ndimage import imread
@@ -12,10 +11,9 @@ from matplotlib.pyplot import subplots,show
 if PY2: FileNotFoundError=IOError
 
 url='http://1zelda.com/tv/pics/rgb_test.jpg'
-fn = 'rgb.jpg'
 
 def loadimg(url,fn):
-    fn = join(gettempdir(),fn)
+    fn = mkstemp('.jpg','rgb')[1]
     try:
         img = imread(fn)
     except FileNotFoundError:

@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 """
 Note: VideoWriter expects dimensions (x,y,3) and will fail otherwise,writing a tiny file perhaps
 Remember, VLC has a long-standing bug where files under about 3fps don't playback
@@ -6,8 +6,8 @@ Remember, VLC has a long-standing bug where files under about 3fps don't playbac
 Note: the isColor parameter of VideoWriter works on Linux!
 """
 import numpy as np
-from tempfile import gettempdir
-from os.path import join
+from tempfile import mkstemp
+from pyimagevideo import Path
 #
 from pyimagevideo.writeavi_opencv import videoWriter
 
@@ -37,8 +37,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJ2C' #segmentation fault -- 15.04 blank video
 """
 #%% generate noise signal
-ofn = join(gettempdir(),'test'+ext)
-
+ofn = mkstemp(ext)[1]
 if usecolor:
     vdim = np.random.rand(nframe,ypix,xpix,3)
 else:

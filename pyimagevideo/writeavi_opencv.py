@@ -5,7 +5,8 @@ except ImportError:
     from cv2 import VideoWriter_fourcc as fourcc
 
 
-def videoWriter(ofn,fourcccode:str,xypix:tuple, usecolor:bool):
+#def videoWriter(ofn,fourcccode:str,xypix:tuple, usecolor:bool):
+def videoWriter(ofn,fourcccode, xypix, usecolor):
     """
     inputs
     ofn: string/Path output filename to write
@@ -15,7 +16,7 @@ def videoWriter(ofn,fourcccode:str,xypix:tuple, usecolor:bool):
     """
     cc4 = fourcc(*fourcccode)
 
-    print('saving to {} with {}'.format(ofn,cc4))
+    print('saving to {} with {}'.format(ofn,fourcccode))
 
     hv = VideoWriter(ofn,cc4, fps=5, frameSize=xypix, isColor=usecolor)
 

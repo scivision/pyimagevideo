@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 This program tests writing multipage TIFF using three different TIFF modules
@@ -19,7 +19,7 @@ numbers in this range."
 reference: http://www.digitalpreservation.gov/formats/content/tiff_tags.shtml
 """
 import logging
-from tempfile import gettempdir
+from tempfile import mkstemp
 from numpy import random, uint8
 from time import time
 import tifffile
@@ -33,19 +33,18 @@ import tifffile
 def tiffdemo(modules):
 #%% test parameters
     nframe=10
-    tdir = gettempdir()
 #%% generate synthetic multiframe image
     x = (random.rand(nframe,512,512,3)*255).astype(uint8)
 
     if 'tifffile' in modules:
-        ofn = tdir/'tifffile.tif'
+        ofn = mkstemp('.tif','tifffile')[1]
         tic = time()
-        write_multipage_tiff(x,str(ofn),descr='my random data',
+        write_multipage_tiff(x,ofn,descr='my random data',
                              tags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
                                    (65002,'f',2,[123456.789,9876.54321],True)])
         y = read_multipage_tiff(str(ofn))
-        print('{:.2f} seconds to read/write with tiffile.'.format(time()-tic))
+        print('{:.2f} seconds to read/write {} with tifffile.'.format(time()-tic,ofn))
 
 #    if 'freeimage' in modules:
 #        ofn = join(tdir,'freeimage.tif')
@@ -56,8 +55,9 @@ def tiffdemo(modules):
 
     if 'libtiff' in modules:
         tic = time()
-        y = rwlibtiff(x,tdir/'testlibtiff.tif')
-        print('{:.2f} seconds to read/write with libtiff.'.format(time()-tic))
+        ofn = mkstemp('.tif','libtiff')[1]
+        y = rwlibtiff(x, ofn)
+        print('{:.2f} seconds to read/write {} with libtiff.'.format(time()-tic,ofn))
 
     return y
 
