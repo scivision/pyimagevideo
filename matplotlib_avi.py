@@ -3,7 +3,6 @@
 example writing matplotlib movies with matlab "grabframe"-like syntax
 
 Just four lines of code to directly write lossless AVIs from Matplotlib
-lines 22-24,29 are all that's needed.
 """
 import matplotlib
 matplotlib.use('agg') #invisible while plotting, but faster and more robust
@@ -23,7 +22,12 @@ Nframe = 20
 fg = figure()
 ax = fg.gca()
 hi = ax.imshow(uniform(size=imsize))
-#%% add writer context and grabframe to typical imshow loop
+#%% add writer context and grabframe to typical imshow loop"
+"""
+http://matplotlib.org/api/animation_api.html#matplotlib.animation.FFMpegWriter
+codec: ffv1 is lossless.
+lots more options are available.
+"""
 #Writer = anim.writers['mencoder']
 Writer = anim.writers['ffmpeg']
 writer = Writer(fps=15, codec='ffv1')
