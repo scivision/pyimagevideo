@@ -31,5 +31,6 @@ with writer.saving(fg, fn, DPI):
     print('writing {}'.format(fn))
     for _ in range(50):
         hi.set_data(uniform(size=imsize))
-        draw(),pause(0.01)
+        draw()
+        pause(0.01) # pause is sometimes needed for more complicated plots, to avoid random crashes
         writer.grab_frame(facecolor='k')
