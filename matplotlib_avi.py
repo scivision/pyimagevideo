@@ -6,7 +6,7 @@ Just four lines of code to directly write lossless AVIs from Matplotlib
 
 http://matplotlib.org/api/animation_api.html#matplotlib.animation.FFMpegWriter
 
-codecs: 
+codecs:
 ffv1: lossless
 mpeg4: lossy
 
@@ -21,12 +21,14 @@ from numpy.random import uniform
 DPI=100
 IMXY=(128,128)
 FPS=15  # keep greater than 3 to avoid VLC playback bug
+WRITER = 'ffmpeg'
 
-def setupfig():
+def setupfig(shape):
     #%% boilerplate for making imshow priming (used in any program)
+    assert len(shape)==2,'2-D image expected'
     fg = figure()
     ax = fg.gca()
-    h = ax.imshow(uniform(size=IMXY))
+    h = ax.imshow(uniform(size=shape))
     return fg,h
 
 def loop(fg,h,w,fn):
@@ -35,26 +37,21 @@ def loop(fg,h,w,fn):
         for _ in range(50):
             h.set_data(uniform(size=IMXY))
             draw()
-            pause(0.01) # pause is NEEDED for more complicated plots, to avoid random crashes
+            # NOTE: pause is NEEDED for more complicated plots, to avoid random crashes
+            pause(0.01)
             w.grab_frame(facecolor='k')
 
 def config(h,codec):
-    #Writer = anim.writers['mencoder'] #usually FFMPEG works
-    Writer = anim.writers['ffmpeg']
+    Writer = anim.writers[WRITER]
     return Writer(fps=FPS, codec=codec)
 
 if __name__ == '__main__':
-    fg,h = setupfig()
-    losslessfn = 'lossless.avi'
-    lossyfn = 'lossy.avi'
-
+    fg,h = setupfig(IMXY)
 #%% lossless
     w = config(h,'ffv1')
-    loop(fg,h,w,losslessfn)
-
+    loop(fg,h,w,'lossless.avi')
 #%% lossy
     w = config(h,'mpeg4')
-    loop(fg,h,w,lossyfn)
-
+    loop(fg,h,w,'lossy.avi')
 #%% cleanup invisible figure
-    close('all')  
+    close('all')
