@@ -15,20 +15,23 @@ nframe=100
 xpix=ypix=256
 
 ext='.avi'
+CC4 = 'FMP4'
+
+# TODO MPG4
+
 """
 all of these codecs worked for me on Ubuntu 14.04 and 16.04
-'MJPG' works in 16.04, 14.04 plays wherever
-'XVID' works in 16.04, 14.04 plays wherever
-'FFV1' works in 16.04, 14.04, use VLC or FFPLAY  to playback
+'MJPG' Motion JPEG
+'XVID' MPEG-4
+'FFV1' Lossless
+'FMP4' MPEG-4
 
 ** maybe works somewhat
-'IYUV' # works 14.04, not work 15.04
 'THEO' ext='.ogv' #must name file .ogv, NOT .avi\  -- somewhat broken, per messages in ffplay
 
-#*** works on 15.04 but not 14.04
-'YV12' # 14.04 writes file, but file is unreadable "improper image header" -- 15.04 video works
-
-*** these codecs did NOT work for me on Ubuntu 14.04 or 15.04 ***
+*** NOT work for me on Ubuntu 16.04 ***
+'YV12'
+'IYUV'
 'Y41P' #silent error, no write
 'YUV9' #silent error, no write -- 15.04 writes but nobody knows how to play
 'DIB ' # silent error, no write
@@ -45,7 +48,7 @@ else:
 
 vid = (vdim*255).astype(np.uint8)
 #%% write lossless AVI
-hv = videoWriter(ofn,'FFV1',(xpix,ypix),usecolor)
+hv = videoWriter(ofn,CC4,(xpix,ypix),usecolor)
 for v in vid:
     hv.write(v)
 
