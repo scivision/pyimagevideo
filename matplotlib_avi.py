@@ -6,6 +6,8 @@ Just four lines of code to directly write lossless AVIs from Matplotlib
 
 http://matplotlib.org/api/animation_api.html#matplotlib.animation.FFMpegWriter
 
+"bitrate" does not have an effect on lossless video, only lossy video (higher bitrate=higher quality=bigger files)
+
 codecs:
 ffv1: lossless
 mpeg4: lossy
@@ -18,6 +20,7 @@ import matplotlib.animation as anim
 #
 from numpy.random import uniform
 
+BITRATE=500e3
 DPI=100
 X=Y=128; N=50
 FPS=15  # keep greater than 3 to avoid VLC playback bug
@@ -53,7 +56,7 @@ def loop(fg,h,w,fn,imgs):
 
 def config(h,codec):
     Writer = anim.writers[WRITER]
-    return Writer(fps=FPS, codec=codec)
+    return Writer(fps=FPS, codec=codec,bitrate=BITRATE)
 
 if __name__ == '__main__':
     imgs = testdata(X,Y,N)
