@@ -2,9 +2,6 @@
     :target: https://travis-ci.org/scienceopen/pyimagevideo
 .. image:: https://coveralls.io/repos/github/scienceopen/pyimagevideo/badge.svg?branch=master 
     :target: https://coveralls.io/github/scienceopen/pyimagevideo?branch=master
-.. image:: https://codeclimate.com/github/scienceopen/pyimagevideo/badges/gpa.svg
-   :target: https://codeclimate.com/github/scienceopen/pyimagevideo
-   :alt: Code Climate
 
 ============
 pyimagevideo
