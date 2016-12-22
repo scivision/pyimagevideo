@@ -13,5 +13,5 @@ setup(name='pyimagevideo',
 	  author='Michael Hirsch',
 	  url='https://github.com/scienceopen/pyimagevideo',
            packages=['pyimagevideo'],
-      install_requires=['tifffile','pathlib2'],
+      install_requires=['tifffile'],
 	  )
