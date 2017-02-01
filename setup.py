@@ -4,9 +4,10 @@ from setuptools import setup
 import subprocess
 
 try:
-    subprocess.call(['conda','install','--file','requirements.txt'])
+    import conda.cli
+    conda.cli.main('install','--file','requirements.txt')
 except Exception as e:
-    pass
+    print(e)
 
 setup(name='pyimagevideo',
 	  description='utilites for reading,writing,plotting all kinds of images and video date',
