@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-import subprocess
 
 try:
     import conda.cli
