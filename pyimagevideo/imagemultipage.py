@@ -1,5 +1,5 @@
 import logging
-from . import Path
+from pathlib import Path
 import re
 from scipy.ndimage import imread # much better than PIL
 from scipy.misc import imresize #ditto

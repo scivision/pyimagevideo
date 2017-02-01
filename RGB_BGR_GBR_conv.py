@@ -4,11 +4,9 @@ demonstrate RGB,BGR, etc. conversions
 Michael Hirsch
 """
 from tempfile import mkstemp
-from six.moves.urllib.request import urlretrieve
-from six import PY2
+from urllib.request import urlretrieve
 from scipy.ndimage import imread
 from matplotlib.pyplot import subplots,show
-if PY2: FileNotFoundError=IOError
 
 url='http://1zelda.com/tv/pics/rgb_test.jpg'
 

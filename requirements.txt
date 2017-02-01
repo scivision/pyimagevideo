@@ -1,6 +1,4 @@
 setuptools
-six
-pathlib2
 numpy
 scikit-image
 matplotlib
