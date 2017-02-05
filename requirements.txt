@@ -1,4 +1,3 @@
-setuptools
 numpy
 scikit-image
 matplotlib

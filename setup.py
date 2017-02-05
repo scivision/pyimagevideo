@@ -7,11 +7,10 @@ try:
     conda.cli.main('install','--file','requirements.txt')
 except Exception as e:
     print(e)
+    import pip
+    pip.main(['install','-r','requirements.txt'])
 
 setup(name='pyimagevideo',
-	  description='utilites for reading,writing,plotting all kinds of images and video date',
-	  author='Michael Hirsch',
-	  url='https://github.com/scienceopen/pyimagevideo',
-           packages=['pyimagevideo'],
+      packages=['pyimagevideo'],
       install_requires=['tifffile'],
 	  )
