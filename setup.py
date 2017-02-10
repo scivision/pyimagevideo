@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-req=['tifffile',
-    'numpy','scikit-image','matplotlib']
+req=['numpy','scikit-image','matplotlib']
 
 setup(name='pyimagevideo',
       packages=['pyimagevideo'],
@@ -14,6 +13,6 @@ setup(name='pyimagevideo',
       'License :: OSI Approved :: MIT License',
       'Programming Language :: Python :: 3.6',
       ],
-      setup_requires=['numpy'], #for tifffile
       install_requires=req,
+      extras_require={'tifffiles': ['tifffile']}
 	  )
