@@ -11,8 +11,9 @@ matrix:
 #    - os: osx
 #      env: pyv=3.6
 
+# 3.5 for scikit-image, waiting on 3.6 wheel
     - os: linux
-      env: pyv=3.6
+      env: pyv=3.5
 
 install:
     - if [[ $TRAVIS_OS_NAME == osx ]]; then
