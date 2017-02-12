@@ -6,7 +6,7 @@ from pathlib import Path
 import cv2 #used to read AVI and for high-speed display
 from skimage.feature import local_binary_pattern
 #
-#from cvutils.getaviprop import getaviprop
+#from morecvutils.getaviprop import getaviprop
 
 def demoLBP(fn):
     fn = Path(fn).expanduser()

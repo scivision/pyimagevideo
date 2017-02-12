@@ -2,14 +2,13 @@
 """
 tests ability of an OpenCV install to read an AVI file
 one of the substantial issues with starting to use OpenCV is missing video codecs
-tested with OpenCV 2.4
 Michael Hirsch
 """
 import cv2
 from pathlib import Path
 #
 try:
-    from cvutils.getaviprop import getaviprop
+    from morecvutils.getaviprop import getaviprop
 except ImportError:
     pass
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-req=['numpy','scikit-image','matplotlib']
+req=['numpy','scikit-image','matplotlib',
+     'morecvutils']
 
 setup(name='pyimagevideo',
       packages=['pyimagevideo'],
