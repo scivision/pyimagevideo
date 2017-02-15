@@ -22,6 +22,8 @@ import logging
 from tempfile import mkstemp
 from numpy import random, uint8
 from time import time
+from scipy.misc import imsave
+from scipy.ndimage import imread
 import tifffile
 
 #try:
@@ -35,7 +37,13 @@ def tiffdemo(modules):
     nframe=10
 #%% generate synthetic multiframe image
     x = (random.rand(nframe,512,512,3)*255).astype(uint8)
-
+#%%
+#    ofn = mkstemp('.tif','scipy')[1]
+#    tic = time()
+#    imsave(ofn,x)
+#    y = imread(ofn)
+#    print(f'{time()-tic:.2f} seconds to read/write {ofn} with scipy.')
+#%%
     if 'tifffile' in modules:
         ofn = mkstemp('.tif','tifffile')[1]
         tic = time()
@@ -43,8 +51,8 @@ def tiffdemo(modules):
                              tags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
                                    (65002,'f',2,[123456.789,9876.54321],True)])
-        y = read_multipage_tiff(str(ofn))
-        print('{:.2f} seconds to read/write {} with tifffile.'.format(time()-tic,ofn))
+        y = read_multipage_tiff(ofn)
+        print(f'{time()-tic:.2f} seconds to read/write {ofn} with tifffile.')
 
 #    if 'freeimage' in modules:
 #        ofn = join(tdir,'freeimage.tif')
@@ -57,7 +65,7 @@ def tiffdemo(modules):
         tic = time()
         ofn = mkstemp('.tif','libtiff')[1]
         y = rwlibtiff(x, ofn)
-        print('{:.2f} seconds to read/write {} with libtiff.'.format(time()-tic,ofn))
+        print(f'{time()-tic:.2f} seconds to read/write {ofn} with libtiff.')
 
     return y
 
@@ -98,7 +106,7 @@ def write_multipage_freeimage(x,ofn):
     writes bad/corrupt/weird multipage GIF
     https://scivision.co/writing-multipage-tiff-with-python/
     """
-    print('freeimage write {}   shape {}'.format(ofn,x.shape))
+    print(f'freeimage write {ofn}   shape {x.shape}')
     #write demo (no tags)
     freeimg.write_multipage(x, str(ofn))
 
@@ -110,7 +118,7 @@ def rwlibtiff(x,fn):
     """
     from libtiff import TIFFimage, TIFF
     with TIFFimage(x,description='my test data') as tf:
-        print('libtiff write ' + fn)
+        print(f'libtiff write {fn}')
 
         #write demo
         tf.write_file(str(fn), compression='none')

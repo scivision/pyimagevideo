@@ -16,15 +16,15 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False):
 
     # only files matching regex
     pat ='(.*)_t\d+\\'+inext+'$'
-    logging.info('using regex {}'.format(pat))
+    logging.info(f'using regex {pat}')
     tlist = filterPick(odir.iterdir(),pat)
-    logging.info('{} file types found in {}'.format(len(tlist),odir))
+    logging.info(f'{len(tlist)} file types found in {odir}')
 #%% convert these sets of images to multipage image
     for t in tlist:
         gfn = odir/(t+outext) #final multipage filename for this image type
         flist = sorted(odir.glob(Path(t).name+'*'+inext))
 
-        logging.debug('globbed files {} to put into {}'.format(flist,gfn))
+        logging.debug(f'globbed files {flist} to put into {gfn}')
         if not flist:
             return ValueError('unexpected problem globbing, found no files')
 
@@ -35,7 +35,7 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False):
             try:
                 images[i,...]=imresize(imread(str(f),mode='RGB'),im0.shape)#they are all of slightly different shape
             except OSError as e:
-                logging.warning('skipping {} due to {}'.format(f,e))
+                logging.warning(f'skipping {f} due to {e}')
                 continue
             if delete:
                 f.unlink()
