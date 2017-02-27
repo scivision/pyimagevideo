@@ -29,7 +29,7 @@ import tifffile
 #try:
 #    from skimage.io._plugins import freeimage_plugin as freeimg
 #    from skimage.io import imread as skimread
-#except:
+#except ImportError:
 #    pass #many people don't have Freeimage installed, and tifffile works better
 
 def tiffdemo(modules):
