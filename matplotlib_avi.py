@@ -24,7 +24,7 @@ BITRATE=500e3
 DPI=100
 X=Y=128; N=50
 FPS=15  # keep greater than 3 to avoid VLC playback bug
-WRITER = 'ffmpeg'
+WRITER = 'ffmpeg_file'
 
 def testdata(x,y,N):
     # TODO: better example data to show downsides of lossy video
