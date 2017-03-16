@@ -7,7 +7,7 @@ req=['numpy','scipy','scikit-image','matplotlib',
 setup(name='pyimagevideo',
       packages=['pyimagevideo'],
       author='Michael Hirsch, Ph.D.',
-      url='https://github.com/scienceopen/pyimagevideo',
+      url='https://github.com/scivision/pyimagevideo',
       description='Demos of OpenCV, read/write videos, etc.',
        classifiers=[
       'Development Status :: 4 - Beta',
