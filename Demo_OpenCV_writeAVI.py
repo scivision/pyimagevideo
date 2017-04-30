@@ -8,7 +8,7 @@ Note: the isColor parameter of VideoWriter works on Linux!
 import numpy as np
 from tempfile import mkstemp
 #
-from pyimagevideo.writeavi_opencv import videoWriter
+from pyimagevideo import videoWriter
 
 usecolor = False
 nframe=100
@@ -16,7 +16,7 @@ xpix=ypix=256
 
 ext='.avi'
 CC4 = 'FMP4'
-
+fps=20
 # TODO MPG4
 
 """
@@ -48,7 +48,7 @@ else:
 
 vid = (vdim*255).astype(np.uint8)
 #%% write lossless AVI
-hv = videoWriter(ofn,CC4,(xpix,ypix),usecolor)
+hv = videoWriter(ofn,CC4,(xpix,ypix),fps,usecolor)
 for v in vid:
     hv.write(v)
 
