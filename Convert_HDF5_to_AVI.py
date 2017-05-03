@@ -12,6 +12,7 @@ Just get percentiles
 ./Convert_HDF5_to_AVI.py ~/data/2012-12-25/extracted.h5
 
 """
+from sys import stderr
 from pathlib import Path
 import h5py
 import numpy as np
@@ -24,7 +25,6 @@ from pyimagevideo import videoWriter
 usecolor = False
 window = 100 # number of frames over which to auto contrast
 PTILE=[5, 99.95]
-wienernhood=3
 """
 all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJPG' Motion JPEG
@@ -45,7 +45,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJ2C' #segmentation fault -- 15.04 blank video
 """
 
-def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=30,ptile=PTILE):
+def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None,ptile=PTILE):
     """
     infn: HDF5 file containing video to read
     outfn: video file
@@ -53,6 +53,8 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=30,ptile=PTI
     """
     infn = Path(infn).expanduser()
     outfn = Path(outfn).expanduser()
+    
+    assert infn.is_file(),f'{infn} is not a file'
 
     if cc4=='THEO':
         assert outfn.suffix=='.ogv'
@@ -61,16 +63,27 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=30,ptile=PTI
         N,y,x = f[h5key].shape[:3]
         print('converting {} frames sized {}x{} from {} to {}'.format(N,x,y,infn,outfn))
 # %% initialize OpenCV video writer
+        if N<100:
+            print(f'picking FPS=5 due to small amount Nframe {N}')
+            fps=5
+        elif fps is None:
+            fps=20
+
+        if fps <= 3:
+            print('Warning: FPS<=3 might not work with some AVI players e.g. VLC')
+
         h = videoWriter(outfn, cc4, (x, y), fps, usecolor)
 # %% loop over HDF5 video
         for i,I in enumerate(f[h5key]):
             if not i % window:
-                f[h5key][i:i+window]
                 if mm is None:
-                    minmax = np.percentile(f[h5key][i:i+window], ptile, interpolation='nearest')
+                    minmax = np.percentile(f[h5key][i:i+window,...], ptile, interpolation='nearest')
                 else:
                     minmax = mm
-                print(f'{i/N*100:.1f} %  min/max {minmax}')
+                if minmax[0] != minmax[1]:
+                    print(f'{i/N*100:.1f} %  min/max {minmax}')
+                else:
+                    print(f'{i/N*100:.1f} % ERROR: Min==max no input image contrast')
 
  #           I = wiener(I,wienernhood)
             #img = bytescale(I, minmax[0], minmax[1]) BUG
@@ -96,6 +109,7 @@ def findvidvar(fn):
     by finding variable of larget size (number of elements) in an HDF5 file that's 3-D or 4-D
     """
     fn = Path(fn).expanduser()
+    assert fn.is_file(),f'{fn} is not a file'
     x = {}
     with h5py.File(fn,'r') as f:
          for v in f:
@@ -115,12 +129,13 @@ if __name__ == '__main__':
     p.add_argument('-k','--h5key',help='key to HDF5 video (variable in HDF5 file)')
     p.add_argument('-cc4',help='video codec CC4 code',default='FMP4')
     p.add_argument('-minmax',help='minimum, maximum values. Automatic if not specified.')
-    p.add_argument('-fps',help='frames/sec of output video',type=int,default=30)
+    p.add_argument('-fps',help='frames/sec of output video',type=int,default=None)
     p = p.parse_args()
 
     h5key = findvidvar(p.infn) if p.h5key is None else p.h5key
 
     if not p.outfn:
         getprc(p.infn, h5key)
+        print('use -o to write file')
     else:
         hdf2avi(p.infn, p.outfn, h5key, p.cc4, p.minmax, p.fps)
