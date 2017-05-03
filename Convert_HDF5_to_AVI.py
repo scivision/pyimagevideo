@@ -23,7 +23,6 @@ from histutils import sixteen2eight
 from pyimagevideo import videoWriter
 
 usecolor = False
-window = 100 # number of frames over which to auto contrast
 PTILE=[5, 99.95]
 """
 all of these codecs worked for me on Ubuntu 14.04 and 16.04
@@ -51,9 +50,11 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None,ptile=P
     outfn: video file
     h5key: HDF5 path to video. Assuming shape Nframe x Y x X x 3 (RGB color)  or Nframe x Y x X  (gray)
     """
+    window = 100 # number of frames over which to auto contrast
+
     infn = Path(infn).expanduser()
     outfn = Path(outfn).expanduser()
-    
+
     assert infn.is_file(),f'{infn} is not a file'
     assert outfn.suffix in ('.ogv','.mkv','.avi')
 
