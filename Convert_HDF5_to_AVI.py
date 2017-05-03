@@ -55,6 +55,7 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None,ptile=P
     outfn = Path(outfn).expanduser()
     
     assert infn.is_file(),f'{infn} is not a file'
+    assert outfn.suffix in ('.ogv','.mkv','.avi')
 
     if cc4=='THEO':
         assert outfn.suffix=='.ogv'
@@ -64,8 +65,11 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None,ptile=P
         print('converting {} frames sized {}x{} from {} to {}'.format(N,x,y,infn,outfn))
 # %% initialize OpenCV video writer
         if N<100:
-            print(f'picking FPS=5 due to small amount Nframe {N}')
-            fps=5
+            print(f'picking FPS=5, lossless codec FFV1 due to small amount Nframe {N}')
+            fps=3
+            outfn.with_suffix('.avi')
+            cc4='FFV1'
+            window = N//10
         elif fps is None:
             fps=20
 
