@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-
+"""
+Simplest demo of using PyGame to playback audio from Python
+https://www.scivision.co/playing-sounds-from-numpy-arrays-in-python/
+"""
 import numpy as np
 import pygame
 from time import sleep
