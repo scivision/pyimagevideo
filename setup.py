@@ -1,8 +1,17 @@
 #!/usr/bin/env python
-from setuptools import setup
+req=['numpy','scipy','scikit-image','matplotlib']
+pipreq = ['morecvutils']
 
-req=['numpy','scipy','scikit-image','matplotlib',
-     'morecvutils']
+import pip
+try:
+    import conda.cli
+    conda.cli.main('install',*req)
+except Exception as e:
+    import pip
+    pip.main(['install'] + req)
+pip.main(['install'] + pipreq)
+# %%
+from setuptools import setup
 
 setup(name='pyimagevideo',
       packages=['pyimagevideo'],
@@ -12,8 +21,8 @@ setup(name='pyimagevideo',
        classifiers=[
       'Development Status :: 4 - Beta',
       'License :: OSI Approved :: MIT License',
-      'Programming Language :: Python :: 3.6',
+      'Programming Language :: Python :: 3',
       ],
-      install_requires=req,
+      install_requires = req+pipreq,
       extras_require={'tifffiles': ['tifffile']}
 	  )

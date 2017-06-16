@@ -6,15 +6,13 @@ python:
 os:
   - linux
 
-
 notifications:
     email: false
 
 git:
     depth: 3
 
-
-install:
+before_install:
     - if [[ $TRAVIS_OS_NAME == osx ]]; then
         wget http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -O miniconda.sh;
       else
@@ -30,6 +28,7 @@ install:
     - conda create -n test python=$TRAVIS_PYTHON_VERSION
     - source activate test
 
+install:
     - python setup.py develop
 
 script: coverage run tests/test.py -v

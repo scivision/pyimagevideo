@@ -1,10 +1,11 @@
-from cv2 import VideoWriter
-from cv2 import VideoWriter_fourcc as fourcc
-# from cv2.cv import FOURCC as fourcc
+from __future__ import print_function
+from sys import stderr
+try:
+    import cv2
+except ImportError:
+    cv2=None
 
-
-#def videoWriter(ofn, fourcccode:str, xypix:tuple, usecolor:bool):
-def videoWriter(ofn, cc4, xypix, fps, usecolor):
+def videoWriter(ofn, cc4:str, xypix, fps, usecolor:bool):
     """
     inputs
     ofn: string/Path output filename to write
@@ -12,9 +13,12 @@ def videoWriter(ofn, cc4, xypix, fps, usecolor):
     xypix: two-element tuple with x,y pixel count
     usecolor: bool color or bw
     """
-    ncc4 = fourcc(*cc4)
+    if cv2 is None:
+        raise ImportError('OpenCV was not installed or loaded')
 
-    hv = VideoWriter(str(ofn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
+    ncc4 = cv2.VideoWriter_fourcc(*cc4)
+
+    hv = cv2.VideoWriter(str(ofn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
 
     if not hv or not hv.isOpened():
         raise RuntimeError('trouble starting video {}'.format(ofn))
