@@ -146,4 +146,4 @@ if __name__ == '__main__':
         getprc(p.infn, h5key)
         print('use -o to write file')
     else:
-        hdf2avi(p.infn, p.outfn, h5key, p.cc4, p.minmax, p.fps)
+        hdf2avi(p.infn, p.outfn, h5key, p.cc4, p.minmax, p.fps, p.step)
