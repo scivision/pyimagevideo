@@ -50,7 +50,7 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
     outfn: video file
     h5key: HDF5 path to video. Assuming shape Nframe x Y x X x 3 (RGB color)  or Nframe x Y x X  (gray)
     """
-    window = 100 # number of frames over which to auto contrast
+    window = step*100 # number of frames over which to auto contrast
 
     infn = Path(infn).expanduser()
     outfn = Path(outfn).expanduser()
@@ -62,16 +62,16 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
         assert outfn.suffix=='.ogv'
 # %% open HDF5 video for parameters
     with h5py.File(infn,'r',libver='latest') as f:
-        N,y,x = f[h5key][::step,:,:].shape[:3]
-
-        print(f'converting {N} (every {step} frames) frames sized {x} x {y} from {infn} to {outfn}')
+        N,y,x = f[h5key].shape[:3]
+        Next = N // step
+        print(f'converting {Next} / {N} frames sized {x} x {y} from {infn} to {outfn}')
 # %% initialize OpenCV video writer
         if N < 100:
             print(f'picking FPS=4, lossless codec FFV1 due to small amount Nframe {N}')
             fps = 4
             outfn.with_suffix('.avi')
             cc4='FFV1'
-            window = N // 10
+            window = step*Next // 10
         elif fps is None:
             fps = 20
 
@@ -80,7 +80,7 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
 
         h = videoWriter(outfn, cc4, (x, y), fps, usecolor)
 # %% loop over HDF5 video
-        for i,I in enumerate(f[h5key][::step,:,:]):
+        for i in range(0,N,step):
             if not i % window:
                 if mm is None:
                     minmax = np.percentile(f[h5key][i:i+window:step,:,:], ptile, interpolation='nearest')
@@ -92,12 +92,14 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
                 else:
                     warnings.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
 
+            I = f[h5key][i,:,:]
  #           I = wiener(I,wienernhood)
             #img = bytescale(I, minmax[0], minmax[1]) BUG
             img = sixteen2eight(I, minmax)
             h.write(img)
 # %% close video
     h.release()
+
 
 def getprc(fn, key, stride=60, ptile=PTILE):
     """ plot some file statistics to help decide min/max"""
@@ -109,6 +111,7 @@ def getprc(fn, key, stride=60, ptile=PTILE):
         prc = np.percentile(f[key][::stride,...], ptile, interpolation='nearest')
 
     print(f'percentiles {ptile}:  {prc}')
+
 
 def findvidvar(fn):
     """
