@@ -12,7 +12,7 @@ Just get percentiles
 ./Convert_HDF5_to_AVI.py ~/data/2012-12-25/extracted.h5
 
 """
-from sys import stderr
+import warnings
 from pathlib import Path
 import h5py
 import numpy as np
@@ -44,7 +44,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJ2C' #segmentation fault -- 15.04 blank video
 """
 
-def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None,ptile=PTILE):
+def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=PTILE, step=1):
     """
     infn: HDF5 file containing video to read
     outfn: video file
@@ -62,33 +62,35 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None,ptile=P
         assert outfn.suffix=='.ogv'
 # %% open HDF5 video for parameters
     with h5py.File(infn,'r',libver='latest') as f:
-        N,y,x = f[h5key].shape[:3]
-        print('converting {} frames sized {}x{} from {} to {}'.format(N,x,y,infn,outfn))
+        N,y,x = f[h5key][::step,:,:].shape[:3]
+
+        print(f'converting {N} (every {step} frames) frames sized {x} x {y} from {infn} to {outfn}')
 # %% initialize OpenCV video writer
-        if N<100:
-            print(f'picking FPS=5, lossless codec FFV1 due to small amount Nframe {N}')
-            fps=3
+        if N < 100:
+            print(f'picking FPS=4, lossless codec FFV1 due to small amount Nframe {N}')
+            fps = 4
             outfn.with_suffix('.avi')
             cc4='FFV1'
-            window = N//10
+            window = N // 10
         elif fps is None:
-            fps=20
+            fps = 20
 
         if fps <= 3:
-            print('Warning: FPS<=3 might not work with some AVI players e.g. VLC')
+            warnings.warn('FPS<=3 might not work with some AVI players e.g. VLC')
 
         h = videoWriter(outfn, cc4, (x, y), fps, usecolor)
 # %% loop over HDF5 video
-        for i,I in enumerate(f[h5key]):
+        for i,I in enumerate(f[h5key][::step,:,:]):
             if not i % window:
                 if mm is None:
-                    minmax = np.percentile(f[h5key][i:i+window,...], ptile, interpolation='nearest')
+                    minmax = np.percentile(f[h5key][i:i+window:step,:,:], ptile, interpolation='nearest')
                 else:
                     minmax = mm
+
                 if minmax[0] != minmax[1]:
                     print(f'{i/N*100:.1f} %  min/max {minmax}')
                 else:
-                    print(f'{i/N*100:.1f} % ERROR: Min==max no input image contrast')
+                    warnings.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
 
  #           I = wiener(I,wienernhood)
             #img = bytescale(I, minmax[0], minmax[1]) BUG
@@ -135,6 +137,7 @@ if __name__ == '__main__':
     p.add_argument('-cc4',help='video codec CC4 code',default='FMP4')
     p.add_argument('-minmax',help='minimum, maximum values. Automatic if not specified.')
     p.add_argument('-fps',help='frames/sec of output video',type=int,default=None)
+    p.add_argument('-s','--step',help='take every Nth frame (default 1)',type=int,default=1)
     p = p.parse_args()
 
     h5key = findvidvar(p.infn) if p.h5key is None else p.h5key
