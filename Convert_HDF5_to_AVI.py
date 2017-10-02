@@ -50,6 +50,9 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
     outfn: video file
     h5key: HDF5 path to video. Assuming shape Nframe x Y x X x 3 (RGB color)  or Nframe x Y x X  (gray)
     """
+    if h5key is None:
+        return
+
     window = step*100 # number of frames over which to auto contrast
 
     infn = Path(infn).expanduser()
@@ -119,7 +122,11 @@ def findvidvar(fn):
     by finding variable of larget size (number of elements) in an HDF5 file that's 3-D or 4-D
     """
     fn = Path(fn).expanduser()
-    assert fn.is_file(),f'{fn} is not a file'
+
+    if not fn.is_file():
+        warnings.warn(f'{fn} is not a file')
+        return
+
     x = {}
     with h5py.File(fn,'r') as f:
          for v in f:
