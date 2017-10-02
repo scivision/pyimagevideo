@@ -142,7 +142,7 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser()
     p.add_argument('infn',help='HDF5 video file to read')
-    p.add_argument('-o','--outfn',help='video file to write e.g. cool.avi')
+    p.add_argument('outfn',help='video file to write e.g. cool.avi')
     p.add_argument('-k','--h5key',help='key to HDF5 video (variable in HDF5 file)')
     p.add_argument('-cc4',help='video codec CC4 code',default='FMP4')
     p.add_argument('-minmax',help='minimum, maximum values. Automatic if not specified.')
@@ -154,6 +154,5 @@ if __name__ == '__main__':
 
     if not p.outfn:
         getprc(p.infn, h5key)
-        print('use -o to write file')
     else:
         hdf2avi(p.infn, p.outfn, h5key, p.cc4, p.minmax, p.fps, step=p.step)
