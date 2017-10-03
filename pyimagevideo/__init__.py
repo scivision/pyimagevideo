@@ -1,5 +1,3 @@
-from __future__ import print_function
-from sys import stderr
 try:
     import cv2
 except ImportError:
@@ -21,6 +19,6 @@ def videoWriter(ofn, cc4:str, xypix, fps, usecolor:bool):
     hv = cv2.VideoWriter(str(ofn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
 
     if not hv or not hv.isOpened():
-        raise RuntimeError('trouble starting video {}'.format(ofn))
+        raise RuntimeError(f'trouble starting video {ofn}')
 
     return hv

@@ -123,10 +123,6 @@ def findvidvar(fn):
     """
     fn = Path(fn).expanduser()
 
-    if not fn.is_file():
-        warnings.warn(f'{fn} is not a file')
-        return
-
     x = {}
     with h5py.File(fn,'r') as f:
          for v in f:
