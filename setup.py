@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 req=['numpy','scipy','scikit-image','matplotlib']
-pipreq = ['morecvutils']
+pipreq = ['morecvutils','future-fstrings']
 
 import pip
 try:

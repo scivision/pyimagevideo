@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 import logging
 from pathlib import Path
 import re

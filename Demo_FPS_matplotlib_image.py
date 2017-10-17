@@ -74,13 +74,13 @@ if __name__ == '__main__':
     dat = randomimg(p.xypixels)
 
     fpsmat = fpsmatplotlib_imshow(dat)
-    print('matplotlib {} imshow average FPS {:.2f}  over {} frames.'.format(matplotlib.__version__,fpsmat,Nfps))
+    print(f'matplotlib {matplotlib.__version__} imshow average FPS {fpsmat:.2f}  over {Nfps} frames.')
 
     fpsmat = fpsmatplotlib_pcolor(dat)
-    print('matplotlib {} pcolormesh average FPS {:.2f}  over {} frames.'.format(matplotlib.__version__,fpsmat,Nfps))
+    print('matplotlib {matplotlib.__version__} pcolormesh average FPS {fpsmat:.2f}  over {Nfps} frames.')
 
 
     if cv2:
         fpscv = fpsopencv(dat)
-        print('OpenCV {} average FPS {:.2f}  over {} frames.'.format(cv2.__version__,fpscv,Nfps))
+        print('OpenCV {cv2.__version__} average FPS {fpscv:.2f}  over {Nfps} frames.')
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: future_fstrings -*-
 """
 scans a directory for all videos and plays them, helping show which codecs you might be having a problem with
 """
@@ -10,7 +11,7 @@ import subprocess
 path = '~/Videos'
 pat = '*'
 #%%
-print('OpenCV {} loaded from {}'.format(cv2.__version__,cv2.__file__))
+print(f'OpenCV {cv2.__version__} loaded from {cv2.__file__}')
 
 path = Path(path).expanduser()
 flist = sorted(path.glob(pat))
