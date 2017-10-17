@@ -64,6 +64,10 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
 
     if cc4=='THEO':
         assert outfn.suffix=='.ogv'
+        
+        
+    if outfn.is_file():
+        raise IOError(f'video output {outfn} already exists.')
 # %% open HDF5 video for parameters
     with h5py.File(infn,'r',libver='latest') as f:
         N,y,x = f[h5key].shape[:3]
