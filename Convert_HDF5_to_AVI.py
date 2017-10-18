@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: future_fstrings -*-
 """
 Note: VideoWriter expects dimensions (x,y,3) and will fail otherwise,writing a tiny file perhaps
 Remember, VLC has a long-standing bug where files under about 3fps don't playback
