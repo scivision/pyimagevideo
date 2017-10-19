@@ -95,7 +95,7 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
                     minmax = mm
 
                 if minmax[0] != minmax[1]:
-                    print(f'{i/N*100:.1f} %  min/max {minmax}')
+                    print(f'{i/N*100:.1f} %  min/max {minmax}\r',end="")
                 else:
                     warnings.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
 
@@ -112,9 +112,9 @@ def getprc(fn, key, stride=60, ptile=PTILE):
     """ plot some file statistics to help decide min/max"""
     fn = Path(fn).expanduser()
     fGB = fn.stat().st_size/1e9
-    print(f'sampling {ptile} percentiles {fn}, reading {1/60*fGB:.1f} of {fGB:.1f} GB')
+    print(f'sampling {ptile} percentiles {fn}, reading {1/stride*fGB:.1f} of {fGB:.1f} GB')
 
-    with h5py.File(fn,'r',libver='latest') as f:
+    with h5py.File(fn, 'r', libver='latest') as f:
         prc = np.percentile(f[key][::stride,...], ptile, interpolation='nearest')
 
     print(f'percentiles {ptile}:  {prc}')
@@ -128,7 +128,7 @@ def findvidvar(fn):
     fn = Path(fn).expanduser()
 
     x = {}
-    with h5py.File(fn,'r') as f:
+    with h5py.File(fn, 'r', libver="latest") as f:
          for v in f:
              if f[v].ndim in (3,4):
                  x[v] = f[v].size
