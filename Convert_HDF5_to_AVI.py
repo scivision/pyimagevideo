@@ -12,6 +12,7 @@ Just get percentiles
 ./Convert_HDF5_to_AVI.py ~/data/2012-12-25/extracted.h5
 
 """
+import sys
 import warnings
 from pathlib import Path
 import h5py
@@ -21,6 +22,7 @@ import numpy as np
 #
 from histutils import sixteen2eight
 from pyimagevideo import videoWriter
+sys.tracebacklimit=1
 
 usecolor = False
 PTILE=[5, 99.95]
@@ -63,8 +65,8 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
 
     if cc4=='THEO':
         assert outfn.suffix=='.ogv'
-        
-        
+
+
     if outfn.is_file():
         raise IOError(f'video output {outfn} already exists.')
 # %% open HDF5 video for parameters
@@ -139,6 +141,9 @@ def findvidvar(fn):
 
 
 if __name__ == '__main__':
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
     from argparse import ArgumentParser
     p = ArgumentParser()
     p.add_argument('infn',help='HDF5 video file to read')
