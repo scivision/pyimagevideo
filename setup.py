@@ -1,15 +1,6 @@
 #!/usr/bin/env python
-req=['numpy','scipy','scikit-image','matplotlib']
-pipreq = ['morecvutils','future-fstrings']
-
-import pip
-try:
-    import conda.cli
-    conda.cli.main('install',*req)
-except Exception as e:
-    import pip
-    pip.main(['install'] + req)
-pip.main(['install'] + pipreq)
+req=['numpy','scipy','scikit-image','matplotlib',
+     'morecvutils','future-fstrings']
 # %%
 from setuptools import setup
 
@@ -23,6 +14,7 @@ setup(name='pyimagevideo',
       'License :: OSI Approved :: MIT License',
       'Programming Language :: Python :: 3',
       ],
-      install_requires = req+pipreq,
-      extras_require={'tifffiles': ['tifffile']}
+      install_requires = req,
+      python_requires='>=3.5',
+      extras_require={'plot': ['tifffile']}
 	  )

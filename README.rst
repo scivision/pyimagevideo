@@ -12,6 +12,15 @@ pyimagevideo
 Functions to **write multipage images** and **make videos** from Numpy arrays.
 Also includes functions to test Matlab and Python codecs
 
+Install
+=======
+:: 
+
+    pip install -e .
+    
+Scripts
+=======
+
 ``Convert_HDF5_to_AVI.py`` converts HDF5 video data to AVI.
 Typically used in biomedical and science imaging, where they use HDF5 instead of TIFF, since HDF5 is a very widespread, fast file format that can store arbitrarily large datasets and metadata.  
 It is recommended to researchers to use HDF5 instead of TIFF, FITS, CDF or proprietary formats for large data streams, including lossless video.
