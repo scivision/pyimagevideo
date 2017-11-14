@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: future_fstrings -*-
 from __future__ import division
 
 def wavelength_to_rgb(wavelength, gamma=0.8):

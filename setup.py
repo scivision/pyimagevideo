@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-req=['numpy','scipy','scikit-image','matplotlib',
-     'morecvutils','future-fstrings']
+req=['numpy','scipy']
 # %%
 from setuptools import setup
 
@@ -15,6 +14,7 @@ setup(name='pyimagevideo',
       'Programming Language :: Python :: 3',
       ],
       install_requires = req,
-      python_requires='>=3.5',
-      extras_require={'plot': ['tifffile']}
+      python_requires='>=3.6',
+      extras_require={'io': ['h5py','scikit-image','matplotlib','tifffile',
+                             'morecvutils']}
 	  )

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: future_fstrings -*-
 """
 scans a directory for all videos and plays them, helping show which codecs you might be having a problem with
 """

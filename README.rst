@@ -1,7 +1,12 @@
 .. image:: https://travis-ci.org/scivision/pyimagevideo.svg?branch=master
     :target: https://travis-ci.org/scivision/pyimagevideo
+    
 .. image:: https://coveralls.io/repos/github/scivision/pyimagevideo/badge.svg?branch=master 
     :target: https://coveralls.io/github/scivision/pyimagevideo?branch=master
+    
+.. image:: https://api.codeclimate.com/v1/badges/f9bdbab86e37a3680cfe/maintainability
+   :target: https://codeclimate.com/github/scivision/pyimagevideo/maintainability
+   :alt: Maintainability
 
 ============
 pyimagevideo
