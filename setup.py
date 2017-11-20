@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 req=['numpy','scipy']
 # %%
-from setuptools import setup
+from setuptools import setup,find_packages
 
 setup(name='pyimagevideo',
-      packages=['pyimagevideo'],
+      packages=find_packages(),
       author='Michael Hirsch, Ph.D.',
       url='https://github.com/scivision/pyimagevideo',
       description='Demos of OpenCV, read/write videos, etc.',
