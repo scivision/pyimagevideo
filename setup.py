@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-install_requires = ['numpy','scipy']
-tests_require = ['nose','coveralls']
+install_requires = ['numpy','scipy','imageio']
+tests_require = ['nose','coveralls','matplotlib']
 # %%
 from setuptools import setup,find_packages
 
@@ -12,7 +12,7 @@ setup(name='pyimagevideo',
                     'io': ['h5py','scikit-image','matplotlib','tifffile',
                              'morecvutils']},
       tests_require=tests_require,
-      version='0.5.0',
+      version='0.6.0',
       author='Michael Hirsch, Ph.D.',
       url='https://github.com/scivision/pyimagevideo',
       description='Demos of OpenCV, read/write videos, etc.',

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This program tests writing multipage TIFF using three different TIFF modules
-also demonstrates writing/reading custom user TIFF tags with Python
-Michael Hirsch
-At this time, I prefer tifffile
+also demonstrates writing/reading custom user TIFF tags with Python.
 
 Notes on custom tags:
 TIFF 6.0 specification page 8
@@ -18,55 +16,56 @@ numbers in this range."
 
 reference: http://www.digitalpreservation.gov/formats/content/tiff_tags.shtml
 """
+from pathlib import Path
 import logging
 from tempfile import mkstemp
-from numpy import random, uint8
+import numpy as np
 from time import time
-from scipy.misc import imsave
-from scipy.ndimage import imread
 import tifffile
-
-#try:
-#    from skimage.io._plugins import freeimage_plugin as freeimg
-#    from skimage.io import imread as skimread
-#except ImportError:
-#    pass #many people don't have Freeimage installed, and tifffile works better
+import imageio
 
 def tiffdemo(modules):
 #%% test parameters
-    nframe=10
-#%% generate synthetic multiframe image
-    x = (random.rand(nframe,512,512,3)*255).astype(uint8)
-#%%
-#    ofn = mkstemp('.tif','scipy')[1]
-#    tic = time()
-#    imsave(ofn,x)
-#    y = imread(ofn)
-#    print(f'{time()-tic:.2f} seconds to read/write {ofn} with scipy.')
-#%%
+    flist = sorted(Path('tests').glob('[0-9].png'))
+    imgs = []
+    for f in flist:
+        imgs.append(imageio.imread(str(f)))
+    imgs = np.asarray(imgs).astype('uint8')
+# %% tifffile
     if 'tifffile' in modules:
         ofn = mkstemp('.tif','tifffile')[1]
+
         tic = time()
-        write_multipage_tiff(x,ofn,descr='my random data',
+        write_multipage_tiff(imgs, ofn,
+                             descr='0 to 9 numbers',
                              tags=[(65000,'s',None,'My custom tag #1',True),
                                    (65001,'s',None,'My custom tag #2',True),
                                    (65002,'f',2,[123456.789,9876.54321],True)])
         y = read_multipage_tiff(ofn)
-        print(f'{time()-tic:.2f} seconds to read/write {ofn} with tifffile.')
-
-#    if 'freeimage' in modules:
-#        ofn = join(tdir,'freeimage.tif')
-#        tic = time()
-#        write_multipage_freeimage(x,ofn)
-#        y = skimread(ofn)
-#        print('{:.2f} seconds to read/write with freeimage.'.format(time()-tic))
-
+        print(f'{time()-tic:.6f} seconds to read/write {ofn} with tifffile.')
+        assert (y==imgs).all(),'tifffile read/write equality failure'
+# %% imageio
+    if 'imageio' in modules:
+        """TIFF I/O is temporarily broken in imageio
+        https://github.com/imageio/imageio/issues/307
+        """
+        y = imageio.mimread(ofn)
+        ofn = mkstemp('.tif','imageio')[1]
+        tic = time()
+        imageio.mimwrite(ofn, imgs,
+                     description='0 to 9 numbers',
+                     extratags=[(65000,'s',None,'My custom tag #1',True),
+                               (65001,'s',None,'My custom tag #2',True),
+                               (65002,'f',2,[123456.789,9876.54321],True)])
+        print(f'{time()-tic:.6f} seconds to read/write {ofn} with imageio.')
+        assert (y==imgs).all(),'imageio read/write equality failure'
+# %%
     if 'libtiff' in modules:
         tic = time()
         ofn = mkstemp('.tif','libtiff')[1]
-        y = rwlibtiff(x, ofn)
-        print(f'{time()-tic:.2f} seconds to read/write {ofn} with libtiff.')
-
+        y = rwlibtiff(imgs, ofn)
+        print(f'{time()-tic:.6f} seconds to read/write {ofn} with libtiff.')
+        assert (y==imgs).all(),'libtiff read/write equality failure'
     return y
 
 #%% using tifffile
@@ -86,6 +85,7 @@ def write_multipage_tiff(x,ofn,descr=None,tags=()):
                         description=descr,
                         extratags=tags)
 
+
 def read_multipage_tiff(fn,verbose=False):
     with tifffile.TiffFile(str(fn)) as tif:
         y = tif.asarray()
@@ -93,23 +93,13 @@ def read_multipage_tiff(fn,verbose=False):
             loadtifftags(tif)
     return y
 
+
 def loadtifftags(tif):
     for page in tif:
         for tag in page.tags.values():
             t = tag.name, tag.value
             if tag.name in ('65000','65001','65002'):
                 print(t)
-#%% demo writing TIFF using scikit-image and free image
-def write_multipage_freeimage(x,ofn):
-    """
-    uses LZW compression for TIFF, but is far slower (20x) than tifffile
-    writes bad/corrupt/weird multipage GIF
-    https://scivision.co/writing-multipage-tiff-with-python/
-    """
-    print(f'freeimage write {ofn}   shape {x.shape}')
-    #write demo (no tags)
-    freeimg.write_multipage(x, str(ofn))
-
 #%% using libtiff
 def rwlibtiff(x,fn):
     """
@@ -133,17 +123,8 @@ def rwlibtiff(x,fn):
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='demo of different TIFF modules read/write with custom user tags')
-    p.add_argument('module',help='module to use: (tifffile, freeimage, libtiff) default: tifffile',nargs='?',default=('tifffile','freeimage'))
+    p.add_argument('module',help='module to use: (tifffile, libtiff) default: tifffile',nargs='?',default=('tifffile'))
     p=p.parse_args()
 
     y = tiffdemo(p.module)
 
-    try:
-        print(y.shape)
-        from matplotlib.pyplot import figure,show
-        ax = figure().gca()
-        ax.imshow(y[0,...])
-        show()
-    except Exception as e:
-        print(e)
-        print('could not plot result, sorry')

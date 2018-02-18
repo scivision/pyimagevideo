@@ -1,14 +1,12 @@
 import logging
 from pathlib import Path
 import re
-from scipy.ndimage import imread # much better than PIL
-from scipy.misc import imresize #ditto
+import imageio
+from skimage.transform import resize
 from numpy import empty
-
+import tifffile
 #from visvis.vvmovie.images2gif import writeGif #garbage doesn't work correctly, bad GIFs
 #note tifffile is 20x faster than freeimage
-import tifffile
-
 
 def png2multipage(odir,inext,outext='.tif',descr='',delete=False):
     odir = Path(odir).expanduser()
@@ -28,19 +26,22 @@ def png2multipage(odir,inext,outext='.tif',descr='',delete=False):
         if not flist:
             return ValueError('unexpected problem globbing, found no files')
 
-        im0 = imread(str(flist[0]),mode='RGB') #priming read
+        im0 = imageio.imread(str(flist[0])) #priming read
 
         images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
         for i,f in enumerate(flist):
             try:
-                images[i,...]=imresize(imread(str(f),mode='RGB'),im0.shape)#they are all of slightly different shape
+                images[i,...] = resize(imageio.imread(str(f)),im0.shape) # they are all of slightly different shape
             except OSError as e:
                 logging.warning(f'skipping {f} due to {e}')
                 continue
             if delete:
                 f.unlink()
         #writeGif(gfn,images,duration=0.1,repeat=True)
+
         tifffile.imsave(str(gfn),images,compress=6,description=descr)
+        #imageio.mimwrite(str(gfn), images, compression=6, description=descr)
+
 
 def filterPick(lines, regex):
     """

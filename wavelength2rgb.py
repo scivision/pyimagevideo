@@ -54,6 +54,7 @@ def wavelength_to_rgb(wavelength, gamma=0.8):
     assert 255>=R>=0 and 255>=G>=0 and 255>=B>=0
 
     return R,G,B
+    
 
 if __name__ == '__main__':
     from argparse import ArgumentParser

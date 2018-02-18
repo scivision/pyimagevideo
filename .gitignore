@@ -1,3 +1,5 @@
+*.jpg
+*.png
 .ipynb_checkpoints/
 *.mj2
 *.avi
