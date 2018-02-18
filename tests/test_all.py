@@ -5,8 +5,6 @@ from pathlib import Path
 #
 import matplotlib
 matplotlib.use('agg')
-#
-import pyimagevideo
 
 R = Path(__file__).parents[1]
 
