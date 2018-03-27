@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-install_requires = ['numpy','scipy','imageio','tifffile','matplotlib']
-tests_require = ['nose','coveralls']
+install_requires = ['numpy','scipy','imageio>=2.3','tifffile','matplotlib>=2.2']
+tests_require = ['pytest','nose','coveralls']
 # %%
 from setuptools import setup,find_packages
 
@@ -16,9 +16,21 @@ setup(name='pyimagevideo',
       author='Michael Hirsch, Ph.D.',
       url='https://github.com/scivision/pyimagevideo',
       description='Demos of OpenCV, read/write videos, etc.',
+      long_description=open('README.rst').read(),
        classifiers=[
       'Development Status :: 4 - Beta',
+      'Environment :: Console',
+      'Intended Audience :: Developers',
+      'Intended Audience :: Education',
       'License :: OSI Approved :: MIT License',
-      'Programming Language :: Python :: 3',
+      'Operating System :: OS Independent',
+      'Programming Language :: Python :: 3.6',
+      'Programming Language :: Python :: 3.7',
+      'Topic :: Multimedia :: Graphics :: 3D Rendering',
+      'Topic :: Multimedia :: Graphics :: Presentation',
+      'Topic :: Multimedia :: Graphics :: Viewers',
+      'Topic :: Multimedia :: Sound/Audio :: Players',
+      'Topic :: Scientific/Engineering :: Visualization',
       ],
+      include_package_data=True,
 	  )

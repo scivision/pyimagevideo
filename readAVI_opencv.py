@@ -10,17 +10,15 @@ from pathlib import Path
 try:
     from morecvutils.getaviprop import getaviprop
 except ImportError:
-    pass
+    getaviprop = None
 
 def testreadavi(fn):
     fn = Path(fn).expanduser()
     vid = cv2.VideoCapture(str(fn))
 
-    try:
+    if getaviprop is not None:
         vparam = getaviprop(vid)
         print(vparam)
-    except Exception:
-        pass
 
     while True:
         ret,img = vid.read() #a 3-D Numpy array, last axis is BGR: blue,green,red

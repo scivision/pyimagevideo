@@ -13,7 +13,7 @@ pat = '*'
 print(f'OpenCV {cv2.__version__} loaded from {cv2.__file__}')
 
 path = Path(path).expanduser()
-flist = sorted(path.glob(pat))
+flist = path.glob(pat)
 
 failed = []
 passed = []
@@ -22,7 +22,9 @@ for fn in flist:
         continue
     
     try:
-        ret = subprocess.check_output(['ffprobe','-show_streams',str(fn)],stderr=subprocess.DEVNULL).decode('utf8').split('\n')
+        ret = subprocess.check_output(['ffprobe','-show_streams',str(fn)],
+                                      stderr=subprocess.DEVNULL,
+                                      universal_newlines=True).split('\n')
         ind = [i for i, elem in enumerate(ret) if 'codec_name' in elem]
         codec = ret[ind[0]].split('=')[1]
     except (IndexError,SubprocessError):
