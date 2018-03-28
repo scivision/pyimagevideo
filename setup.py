@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-install_requires = ['numpy','scivpy','imageio>=2.3','scikit-image','matplotlib>=2.2']  # skimage needs scipy on Windows
+install_requires = ['numpy','scipy','imageio>=2.3','scikit-image','matplotlib>=2.2']  # skimage needs scipy on Windows
 tests_require = ['pytest','nose','coveralls']
 # %%
 from setuptools import setup,find_packages
