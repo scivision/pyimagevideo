@@ -2,17 +2,19 @@
 """
 Simplest demo of using PyAudio to playback audio from Python
 https://www.scivision.co/playing-sounds-from-numpy-arrays-in-python/
+
+requires libportaudio-dev
+
+I don't use PortAudio as it conflicts with WINE.
 """
 import numpy as np
 import pyaudio
+#
+from pyimagevideo import tone
 
-fs = 8000 # Hz
-T = 1. # second, arbitrary length of tone
+fs = 8000
 
-# 1 kHz sine wave, 1 second long, sampled at 8 kHz
-t = np.arange(0,T,1/fs)
-x = 0.5 * np.sin(2*np.pi*1000*t)   # 0.5 is arbitrary to avoid clipping sound card DAC
-x  = (x*32768).astype(np.int16)  # scale to int16 for sound card
+x  = (tone(fs)*0.99*32768).astype(np.int16)  # scale to int16 for sound card, 0.99 to not clip
 
 # Sorry, PyAudio doesn't seem to have context manager
 P = pyaudio.PyAudio()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-install_requires = ['numpy','scipy','imageio>=2.3','tifffile','matplotlib>=2.2']
+install_requires = ['numpy','scivpy','imageio>=2.3','scikit-image','matplotlib>=2.2']  # skimage needs scipy on Windows
 tests_require = ['pytest','nose','coveralls']
 # %%
 from setuptools import setup,find_packages
@@ -9,8 +9,9 @@ setup(name='pyimagevideo',
       python_requires='>=3.6',
       install_requires=install_requires,
       extras_require={'tests':tests_require,
-                    'io': ['h5py','scikit-image',
-                             'morecvutils']},
+                    'io': ['h5py','scipy',
+                             'morecvutils'],
+                    'audio':[]},
       tests_require=tests_require,
       version='0.6.0',
       author='Michael Hirsch, Ph.D.',

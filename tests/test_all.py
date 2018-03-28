@@ -1,21 +1,32 @@
 #!/usr/bin/env python
-import unittest
+import tempfile
+import numpy as np
 import subprocess
 from pathlib import Path
+import imageio
 #
-import matplotlib
-matplotlib.use('agg')
-
+import pyimagevideo as piv
 R = Path(__file__).parents[1]
 
-class BasicTests(unittest.TestCase):
 
-    def test_rgbbgr(self):
-        subprocess.check_call(['python','RGB_BGR_GBR_conv.py','--noshow'], cwd=R)
+def test_rgbbgr():
+    subprocess.check_call(['python','RGB_BGR_GBR_conv.py','--noshow'], cwd=R)
 
-    def test_tiff_multipage_rw(self):
-        subprocess.check_call(['python','Image_write_multipage.py'], cwd=R)
+def test_tiff_multipage_rw():
+    with tempfile.TemporaryDirectory() as d:
+        d = Path(d).expanduser()
+
+        piv.genimgseries(d)
+
+        ofn = d/'mp.tif'
+        piv.png2tiff(ofn, '[0-9].png')
+
+        y = imageio.mimread(ofn)
+
+    assert len(y) == 10
+
+def test_wavelength2rgb():
+    np.testing.assert_allclose(piv.wavelength2rgb(720),(146,0,0))
 
 if __name__ == '__main__':
-    subprocess.check_call(['python','gentestimgs.py'], cwd=R/'tests')
-    unittest.main()
+    np.testing.run_module_suite()

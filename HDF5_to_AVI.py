@@ -70,7 +70,7 @@ def hdf2avi(infn:Path, outfn:Path, h5key:str, cc4:str, mm=None, fps=None, ptile=
     if outfn.is_file():
         raise IOError(f'video output {outfn} already exists.')
 # %% open HDF5 video for parameters
-    with h5py.File(infn,'r',libver='latest') as f:
+    with h5py.File(infn,'r') as f:
         N,y,x = f[h5key].shape[:3]
         Next = N // step
         print(f'converting {Next} / {N} frames sized {x} x {y} from {infn} to {outfn}')
@@ -116,7 +116,7 @@ def getprc(fn, key, stride=60, ptile=PTILE):
     fGB = fn.stat().st_size/1e9
     print(f'sampling {ptile} percentiles {fn}, reading {1/stride*fGB:.1f} of {fGB:.1f} GB')
 
-    with h5py.File(fn, 'r', libver='latest') as f:
+    with h5py.File(fn, 'r') as f:
         prc = np.percentile(f[key][::stride,...], ptile, interpolation='nearest')
 
     print(f'percentiles {ptile}:  {prc}')
@@ -130,7 +130,7 @@ def findvidvar(fn):
     fn = Path(fn).expanduser()
 
     x = {}
-    with h5py.File(fn, 'r', libver="latest") as f:
+    with h5py.File(fn, 'r') as f:
          for v in f:
              if f[v].ndim in (3,4):
                  x[v] = f[v].size

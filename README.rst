@@ -3,6 +3,9 @@
 
 .. image:: https://coveralls.io/repos/github/scivision/pyimagevideo/badge.svg?branch=master
     :target: https://coveralls.io/github/scivision/pyimagevideo?branch=master
+    
+.. image:: https://ci.appveyor.com/api/projects/status/b55xigknwgd8m0y7?svg=true
+   :target: https://ci.appveyor.com/project/scivision/pyimagevideo
 
 .. image:: https://api.codeclimate.com/v1/badges/f9bdbab86e37a3680cfe/maintainability
    :target: https://codeclimate.com/github/scivision/pyimagevideo/maintainability

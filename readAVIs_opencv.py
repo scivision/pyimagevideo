@@ -10,7 +10,7 @@ import subprocess
 path = '~/Videos'
 pat = '*'
 #%%
-print(f'OpenCV {cv2.__version__} loaded from {cv2.__file__}')
+print('OpenCV', cv2.__version__, 'loaded from', cv2.__file__)
 
 path = Path(path).expanduser()
 flist = path.glob(pat)
@@ -20,14 +20,14 @@ passed = []
 for fn in flist:
     if not fn.is_file():
         continue
-    
+
     try:
         ret = subprocess.check_output(['ffprobe','-show_streams',str(fn)],
                                       stderr=subprocess.DEVNULL,
                                       universal_newlines=True).split('\n')
         ind = [i for i, elem in enumerate(ret) if 'codec_name' in elem]
         codec = ret[ind[0]].split('=')[1]
-    except (IndexError,SubprocessError):
+    except (IndexError,subprocess.SubprocessError):
         codec = str(fn)
 #%%
     v = cv2.VideoCapture(str(fn))
@@ -38,16 +38,16 @@ for fn in flist:
     """
     NOTE: will still "pass" even if video is scrambled or blank
     """
-    passed.append(codec) 
+    passed.append(codec)
     while True:
         ret,frame = v.read()
         if not ret:
             break
-    
+
         gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
         cv2.imshow(str(fn),gray)
         cv2.waitKey(10)
-        
+
 
     v.release()
     cv2.destroyWindow(str(fn))
@@ -55,7 +55,7 @@ for fn in flist:
 if passed:
     print('passing codecs:')
     print('\n'.join(passed))
-    
+
 if failed:
     print('failed codecs:')
     print('\n'.join(failed))

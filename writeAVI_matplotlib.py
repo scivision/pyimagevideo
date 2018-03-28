@@ -39,11 +39,12 @@ def setupfig(img,title=''):
     ax.set_title(title,color='g')
     return fg,h
 
+
 def loop(fg,h,w,fn,imgs):
     assert imgs.ndim in (3,4),'assuming image stack iterating over first dimension Nframe x X x Y [x RGB]'
 
     with w.saving(fg, fn, DPI):
-        print('writing {}'.format(fn))
+        print('writing',fn)
         for I in imgs:
             h.set_data(I)
             draw()
@@ -57,6 +58,7 @@ def loop(fg,h,w,fn,imgs):
 def config(h,codec):
     Writer = anim.writers[WRITER]
     return Writer(fps=FPS, codec=codec,bitrate=BITRATE)
+
 
 if __name__ == '__main__':
     imgs = testdata(X,Y,N)

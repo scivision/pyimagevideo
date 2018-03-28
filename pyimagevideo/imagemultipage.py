@@ -1,49 +1,27 @@
+"""
+These functions are for https://github.com/scivision/histfeas output plot collection
+"""
 import logging
 from pathlib import Path
 import re
-import imageio
-from skimage.transform import resize
-from numpy import empty
-import tifffile
-#from visvis.vvmovie.images2gif import writeGif #garbage doesn't work correctly, bad GIFs
-#note tifffile is 20x faster than freeimage
+#
+from . import png2tiff
+# from visvis.vvmovie.images2gif import writeGif #garbage doesn't work correctly, bad GIFs
+# imageio/tifffile is 20x faster than freeimage
 
-def png2multipage(odir,inext,outext='.tif',descr='',delete=False):
+
+def hist2tif(odir:Path,inext:str):
     odir = Path(odir).expanduser()
-    assert odir.is_dir()
-
-    # only files matching regex
     pat ='(.*)_t\d+\\'+inext+'$'
     logging.info(f'using regex {pat}')
     tlist = filterPick(odir.iterdir(),pat)
     logging.info(f'{len(tlist)} file types found in {odir}')
-#%% convert these sets of images to multipage image
+
     for t in tlist:
-        gfn = odir/(t+outext) #final multipage filename for this image type
-        flist = sorted(odir.glob(Path(t).name+'*'+inext))
-
-        logging.debug(f'globbed files {flist} to put into {gfn}')
-        if not flist:
-            return ValueError('unexpected problem globbing, found no files')
-
-        im0 = imageio.imread(str(flist[0])) #priming read
-
-        images = empty((len(flist),im0.shape[0],im0.shape[1],im0.shape[2]),dtype=im0.dtype)
-        for i,f in enumerate(flist):
-            try:
-                images[i,...] = resize(imageio.imread(str(f)),im0.shape) # they are all of slightly different shape
-            except OSError as e:
-                logging.warning(f'skipping {f} due to {e}')
-                continue
-            if delete:
-                f.unlink()
-        #writeGif(gfn,images,duration=0.1,repeat=True)
-
-        tifffile.imsave(str(gfn),images,compress=6,description=descr)
-        #imageio.mimwrite(str(gfn), images, compression=6, description=descr)
+        png2tiff(odir/(t + '.tif'), pat)
 
 
-def filterPick(lines, regex):
+def filterPick(lines:list, regex:str) -> set:
     """
     http://stackoverflow.com/questions/2436607/how-to-use-re-match-objects-in-a-list-comprehension
     """
