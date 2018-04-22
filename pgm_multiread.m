@@ -35,7 +35,7 @@ function [xy,prec] = pgmheader(fid,verbose)
     return
   end
   
-  assert(strcmp(mag,Nmag),['Wrong Magic Number ',mag,' exprected ',Nmag])
+  assert(strcmp(mag,Nmag),['Wrong Magic Number ',mag,' expected ',Nmag])
 %% find size of image
   lin = strtrim(fgetl(fid));
   while ~feof(fid) && (length(lin) == 0 || lin(1) == "#")
