@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import logging
 import tempfile
 import numpy as np
 import subprocess
@@ -32,6 +33,7 @@ def test_cv2codec_read():
     try:
         import cv2
     except ImportError:
+        logging.warning('cv2 not installed')
         return
         
     fn = R/'tests/star_collapse_out.avi'
@@ -44,8 +46,10 @@ def test_cv2codec_read():
     assert img.shape == (480,720,3),'video not decoded properly'
     
     
-#    cv2.imshow(fn.name, img)
- #   cv2.destroyAllWindows()
+    cv2.imshow(fn.name, img)
+    cv2.waitKey(delay=1000)
+    cv2.destroyAllWindows()
     
 if __name__ == '__main__':
+    test_cv2codec_read()
     np.testing.run_module_suite()
