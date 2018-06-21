@@ -48,9 +48,9 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 """
 
 
-def hdf2avi(infn: Path, outfn: Path, 
-            h5key: str, cc4: str, 
-            mm=None, fps=None, 
+def hdf2avi(infn: Path, outfn: Path,
+            h5key: str, cc4: str,
+            mm=None, fps=None,
             ptile=PTILE, step=1):
     """
     infn: HDF5 file containing video to read
