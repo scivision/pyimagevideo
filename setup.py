@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from pathlib import Path
 
 install_requires = ['numpy', 'scipy', 'imageio>=2.3', 'scikit-image', 'matplotlib>=2.2']  # skimage needs scipy on Windows
-tests_require = ['pytest', 'nose', 'coveralls']
+tests_require = ['pytest', 'coveralls', 'flake8', 'mypy']
 
 scripts = list(map(str, Path(__file__).parent.glob('*.py')))
 scripts = [s for s in scripts if not s.endswith('setup.py')]
