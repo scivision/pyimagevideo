@@ -13,12 +13,12 @@ from pyimagevideo import VideoWriter
 
 EXE = 'ffplay'  # path to your video player
 usecolor = False
-nframe=30
-xpix=ypix=256
+nframe = 30
+xpix = ypix = 256
 
-ext='.avi'
+ext = '.avi'
 CC4 = 'FMP4'
-fps=10
+fps = 10
 # TODO MPG4
 
 """
@@ -40,14 +40,14 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'CVID' #encoder not found
 'MJ2C' #segmentation fault -- 15.04 blank video
 """
-#%% generate noise signal
-shape = (nframe,ypix,xpix,3) if usecolor else (nframe,ypix,xpix)
+# %% generate noise signal
+shape = (nframe, ypix, xpix, 3) if usecolor else (nframe, ypix, xpix)
 
-vid = (np.random.random(shape)*255).astype(np.uint8)
-#%% write lossless AVI
+vid = (np.random.random(shape) * 255).astype(np.uint8)
+# %% write lossless AVI
 with tempfile.NamedTemporaryFile(suffix=ext) as f:
-    with VideoWriter(f.name, CC4, (xpix,ypix), fps, usecolor) as hv:
+    with VideoWriter(f.name, CC4, (xpix, ypix), fps, usecolor) as hv:
         for v in vid:
             hv.write(v)
 
-    subprocess.check_call([EXE,'-autoexit',f.name])
+    subprocess.check_call([EXE, '-autoexit', f.name])

@@ -7,9 +7,9 @@ import pygame
 from time import sleep
 from pyimagevideo import dialtone
 
-fs = 8000 # Hz
+fs = 8000  # Hz
 
-x  = (dialtone(fs)*32768).astype('int16')  # scale to int16 for sound card
+x = (dialtone(fs) * 32768).astype('int16')  # scale to int16 for sound card
 
 
 pygame.mixer.pre_init(fs, size=-16, channels=1)

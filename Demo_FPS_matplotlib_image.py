@@ -16,11 +16,10 @@ Caveats:
 It's just a very simple comparison, showing OpenCV's huge FPS advantage
 
 """
-from __future__ import division
 from numpy import uint8
 from numpy.random import rand
 import matplotlib
-from matplotlib.pyplot import figure,draw,pause,close
+from matplotlib.pyplot import figure, draw, pause, close
 from time import time
 try:
     import cv2
@@ -29,49 +28,54 @@ except ImportError:
 #
 Nfps = 100
 
+
 def randomimg(xy):
-    return (rand(2,xy[0],xy[1])*255).astype(uint8)
+    return (rand(2, xy[0], xy[1]) * 255).astype(uint8)
+
 
 def fpsmatplotlib_imshow(dat):
     fg = figure()
     ax = fg.gca()
-    h = ax.imshow(dat[0,...])
+    h = ax.imshow(dat[0, ...])
     ax.set_title('imshow')
     tic = time()
     for i in range(Nfps):
-        h.set_data(dat[i%2,...])
+        h.set_data(dat[i % 2, ...])
         draw(), pause(1e-6)
     close(fg)
-    return Nfps/(time()-tic)
+    return Nfps / (time() - tic)
+
 
 def fpsmatplotlib_pcolor(dat):
     fg = figure()
     ax = fg.gca()
-    h = ax.pcolormesh(dat[0,...])
+    h = ax.pcolormesh(dat[0, ...])
     ax.set_title('pcolormesh')
-    ax.autoscale(True,tight=True)
+    ax.autoscale(True, tight=True)
     tic = time()
     for i in range(Nfps):
-        h.set_array(dat[i%2,...].ravel())
+        h.set_array(dat[i % 2, ...].ravel())
         draw(), pause(1e-6)
     close(fg)
-    return Nfps/(time()-tic)
+    return Nfps / (time() - tic)
+
 
 def fpsopencv(dat):
     tic = time()
     for i in range(Nfps):
-        cv2.imshow('fpstest',dat[i%2,...])
-        cv2.waitKey(1) #integer milliseconds, 0 makes wait forever
+        cv2.imshow('fpstest', dat[i % 2, ...])
+        cv2.waitKey(1)  # integer milliseconds, 0 makes wait forever
     cv2.destroyAllWindows()
-    return Nfps / (time()-tic)
+    return Nfps / (time() - tic)
+
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='measure FPS for rapidly updating plot with Matplotlib vs. OpenCV')
-    p.add_argument('-p','--xypixels',help='number of pixels for x and y',type=int,default=(512,512))
-    p = p.parse_args()
+    p.add_argument('-p', '--xypixels', help='number of pixels for x and y', type=int, default=(512, 512))
+    P = p.parse_args()
 
-    dat = randomimg(p.xypixels)
+    dat = randomimg(P.xypixels)
 
     fpsmat = fpsmatplotlib_imshow(dat)
     print(f'matplotlib {matplotlib.__version__} imshow average FPS {fpsmat:.2f}  over {Nfps} frames.')
@@ -79,8 +83,6 @@ if __name__ == '__main__':
     fpsmat = fpsmatplotlib_pcolor(dat)
     print('matplotlib {matplotlib.__version__} pcolormesh average FPS {fpsmat:.2f}  over {Nfps} frames.')
 
-
     if cv2:
         fpscv = fpsopencv(dat)
         print('OpenCV {cv2.__version__} average FPS {fpscv:.2f}  over {Nfps} frames.')
-

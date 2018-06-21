@@ -3,7 +3,8 @@
 scipy
 """
 
-from numpy import uint8,cast,array
+from numpy import uint8, cast, array
+
 
 def bytescale(data, cmin=None, cmax=None, high=255, low=0):
     """
@@ -69,6 +70,7 @@ def bytescale(data, cmin=None, cmax=None, high=255, low=0):
     bytedata[bytedata < low] = low
     return cast[uint8](bytedata.round())
 
+
 if __name__ == '__main__':
-    assert bytescale(array([157]),171,255)==0
-    assert bytescale(array([157],dtype='uint16'),171,255)==0
+    assert bytescale(array([157]), 171, 255) == 0
+    assert bytescale(array([157], dtype='uint16'), 171, 255) == 0

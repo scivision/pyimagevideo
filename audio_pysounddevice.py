@@ -11,12 +11,12 @@ import sounddevice
 from time import sleep
 from pyimagevideo import dialtone
 
-fs = 8000 # Hz
+fs = 8000  # Hz
 T = 1
 
-x  = (dialtone(fs,T)*32768).astype('int16')  # scale to int16 for sound card
+x = (dialtone(fs, T) * 32768).astype('int16')  # scale to int16 for sound card
 
-sounddevice.play(x,fs)  # releases GIL
+sounddevice.play(x, fs)  # releases GIL
 
 
 sleep(T)  # NOTE: Since sound playback is async, allow sound playback to finish before Python exits

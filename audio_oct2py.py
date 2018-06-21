@@ -6,11 +6,11 @@ import numpy as np
 from oct2py import Oct2Py
 from pyimagevideo import dialtone
 
-fs = 8000 # Hz
+fs = 8000  # Hz
 
-x  = (dialtone(fs)*32768).astype(np.int16)  # scale to int16 for sound card
+x = (dialtone(fs) * 32768).astype(np.int16)  # scale to int16 for sound card
 
 with Oct2Py() as oc:
-#    print(oc.audiodevinfo())
-    a = oc.audioplayer(x,fs)
+    #    print(oc.audiodevinfo())
+    a = oc.audioplayer(x, fs)
     oc.play(a)

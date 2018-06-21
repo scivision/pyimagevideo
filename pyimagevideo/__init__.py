@@ -1,17 +1,18 @@
 try:
     import cv2
 except ImportError:
-    cv2=None
+    cv2 = None
 
 from contextlib import contextmanager
 import numpy as np
-from matplotlib.pyplot import figure,draw, close
+from matplotlib.pyplot import figure, draw, close
 from pathlib import Path
 import imageio
 from skimage.transform import resize
+from typing import List, Tuple, Union
 
 
-def wavelength2rgb(wavelength:float, gamma:float=0.8):
+def wavelength2rgb(wavelength: float, gamma: float=0.8) -> Tuple[float, float, float]:
     '''
     http://www.noah.org/wiki/Wavelength_to_RGB_in_Python
 
@@ -55,35 +56,35 @@ def wavelength2rgb(wavelength:float, gamma:float=0.8):
         G = 0.
         B = 0.
 
-    R = int(R*255)
-    G = int(G*255)
-    B = int(B*255)
+    R = int(R * 255)
+    G = int(G * 255)
+    B = int(B * 255)
 
-    assert 255>=R>=0 and 255>=G>=0 and 255>=B>=0
+    assert 255 >= R >= 0 and 255 >= G >= 0 and 255 >= B >= 0
 
-    return R,G,B
+    return R, G, B
 
 
-def tone(fs:int=8000, T:float=1, f0:float=1000) -> np.ndarray:
+def tone(fs: int=8000, T: float=1, f0: float=1000) -> np.ndarray:
     """
     generate f0 Hz sinusoid for T seconds at fs S/s.
     """
-    return np.sin(2*np.pi*f0*np.arange(0, T, 1/fs))
+    return np.sin(2 * np.pi * f0 * np.arange(0, T, 1 / fs))
 
 
-def dialtone(fs:int=8000, T:float=1):
+def dialtone(fs: int=8000, T: float=1):
     """
     generate North American dial tone
     https://en.wikipedia.org/wiki/Precise_Tone_Plan
     """
-    return 0.5*(tone(fs,T,440) + tone(fs,T,350))
+    return 0.5 * (tone(fs, T, 440) + tone(fs, T, 350))
 
 
-def genimgseries(odir:Path) -> list:
+def genimgseries(odir: Path) -> List[Path]:
     odir = Path(odir).expanduser()
 
-    fg = figure(1,figsize=(0.5,0.5))
-  #  fg.set_visible(False)
+    fg = figure(1, figsize=(0.5, 0.5))
+    # fg.set_visible(False)
     ax = fg.gca()
 
     flist = []
@@ -91,7 +92,7 @@ def genimgseries(odir:Path) -> list:
         ax.clear()
         ax.axis('off')
 
-        ax.text(0,0,i,fontsize=36)
+        ax.text(0, 0, i, fontsize=36)
 
         draw()
 
@@ -105,7 +106,7 @@ def genimgseries(odir:Path) -> list:
     return flist
 
 
-def png2tiff(ofn:Path, pat:str, indir:Path=None):
+def png2tiff(ofn: Path, pat: str, indir: Path=None):
     """
     convert series of PNG, which may not be exactly the same shape,
     to a multipage TIFF (in the same directory)
@@ -117,39 +118,39 @@ def png2tiff(ofn:Path, pat:str, indir:Path=None):
     """
     ofn = Path(ofn).expanduser()
     indir = ofn.parent if indir is None else Path(indir).expanduser()
-#%% convert these sets of images to multipage image
+# %% convert these sets of images to multipage image
     flist = sorted(indir.glob(pat))  # yes, sorted()
     if not flist:
         raise FileNotFoundError('found no files with {pat} in {ofn}')
 
-    im0 = imageio.imread(flist[0]) #priming read
+    im0 = imageio.imread(flist[0])  # priming read
     images = np.empty((len(flist), *im0.shape), dtype=im0.dtype)
-    for i,f in enumerate(flist):
+    for i, f in enumerate(flist):
         im = imageio.imread(f)
-        images[i,...] = resize(im, im0.shape, mode='edge') # they are all of slightly different shape
+        images[i, ...] = resize(im, im0.shape, mode='edge')  # they are all of slightly different shape
 
     imageio.mimwrite(ofn, images)
 
 
 @contextmanager
-def VideoWriter(ofn:Path, cc4:str, xypix:tuple, fps:float, usecolor:bool):
-        """
-        inputs
-        ofn: string/Path output filename to write
-        fourcccode: string with four character fourcc code e.g. 'FFV1'
-        xypix: two-element tuple with x,y pixel count
-        usecolor: bool color or bw
-        """
-        if cv2 is None:
-            raise ImportError('OpenCV was not installed or loaded')
+def VideoWriter(ofn: Union[str, Path], cc4: str, xypix: tuple, fps: float, usecolor: bool):
+    """
+    inputs
+    ofn: string/Path output filename to write
+    fourcccode: string with four character fourcc code e.g. 'FFV1'
+    xypix: two-element tuple with x,y pixel count
+    usecolor: bool color or bw
+    """
+    if cv2 is None:
+        raise ImportError('OpenCV was not installed or loaded')
 
-        ncc4 = cv2.VideoWriter_fourcc(*cc4)
+    ncc4 = cv2.VideoWriter_fourcc(*cc4)
 
-        hv = cv2.VideoWriter(str(ofn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
+    hv = cv2.VideoWriter(str(ofn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
 
-        if not hv or not hv.isOpened():
-            raise RuntimeError(f'trouble starting video {ofn}')
+    if not hv or not hv.isOpened():
+        raise RuntimeError(f'trouble starting video {ofn}')
 
-        yield hv
+    yield hv
 
-        hv.release()
+    hv.release()

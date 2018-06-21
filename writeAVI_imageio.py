@@ -12,18 +12,18 @@ import imageio
 
 EXE = 'ffplay'  # path to your video player
 usecolor = False
-nframe=30
-xpix=ypix=256
+nframe = 30
+xpix = ypix = 256
 
-ext='.avi'
-fps=10
+ext = '.avi'
+fps = 10
 
-#%% generate noise signal
-shape = (nframe,ypix,xpix,3) if usecolor else (nframe,ypix,xpix)
+# %% generate noise signal
+shape = (nframe, ypix, xpix, 3) if usecolor else (nframe, ypix, xpix)
 
-vid = (np.random.random(shape)*255).astype(np.uint8)
-#%% write lossless AVI
+vid = (np.random.random(shape) * 255).astype(np.uint8)
+# %% write lossless AVI
 with tempfile.NamedTemporaryFile(suffix=ext) as f:
     imageio.mimwrite(f.name, vid)
 # %% check video
-    subprocess.check_call([EXE,'-autoexit',f.name])
+    subprocess.check_call([EXE, '-autoexit', f.name])
