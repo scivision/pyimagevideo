@@ -5,6 +5,8 @@ from pathlib import Path
 install_requires = ['numpy', 'scipy', 'imageio>=2.3', 'scikit-image', 'matplotlib>=2.2']  # skimage needs scipy on Windows
 tests_require = ['pytest', 'nose', 'coveralls']
 
+scripts = list(map(str, Path(__file__).parent.glob('*.py')))
+scripts = [s for s in scripts if not s.endswith('setup.py')]
 
 setup(name='pyimagevideo',
       packages=find_packages(),
@@ -36,5 +38,5 @@ setup(name='pyimagevideo',
           'Topic :: Scientific/Engineering :: Visualization',
       ],
       include_package_data=True,
-      scripts=list(Path(__file__).parent.glob('*.py')),
+      scripts=scripts,
       )
