@@ -19,7 +19,7 @@ setup(name='pyimagevideo',
       author='Michael Hirsch, Ph.D.',
       url='https://github.com/scivision/pyimagevideo',
       description='Demos of OpenCV, read/write videos, etc.',
-      long_description=open('README.rst').read(),
+      long_description=open('README.md').read(),
       classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',

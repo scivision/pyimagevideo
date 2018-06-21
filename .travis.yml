@@ -20,7 +20,7 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 
-install: pip -q install -e .[tests]
+install: pip install -e .[tests]
 
 script:
   - pytest -v
