@@ -5,11 +5,13 @@ http://1zelda.com/tv/pics/rgb_test.jpg
 
 Michael Hirsch
 """
+from argparse import ArgumentParser
 import imageio
+import numpy as np
 from matplotlib.pyplot import subplots, show
 
 
-def plotimg(rgb):
+def plotimg(rgb: np.ndarray):
     """plot RGB, BGR, GBR"""
     fg, ax = subplots(1, 3, figsize=(15, 4))
 
@@ -27,8 +29,7 @@ def plotimg(rgb):
     fg.suptitle("Color order top to bottom")
 
 
-if __name__ == '__main__':
-    from argparse import ArgumentParser
+def main():
     p = ArgumentParser()
     p.add_argument('--noshow', help='for self-test', action='store_true')
     P = p.parse_args()
@@ -40,3 +41,7 @@ if __name__ == '__main__':
 
     if not P.noshow:
         show()
+
+
+if __name__ == '__main__':
+    main()

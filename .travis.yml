@@ -1,17 +1,18 @@
 language: python
-fast_finish: true
-
-python:
-  - 3.6
-
-os:
-  - linux
-
+sudo: required
+dist: xenial
 group: travis_latest
 
 git:
   depth: 3
+  quiet: true
 
+python:
+  - 3.6
+#  - 3.7  # waiting opencv etc. 3.7 
+
+os:
+  - linux
       
 # Fake X11 server
 before_script:
@@ -23,12 +24,13 @@ before_script:
 install: pip install -e .[tests]
 
 script:
-  - pytest -v
+  - pytest -sv
   - flake8
   - mypy . --ignore-missing-imports
 
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then 
-    coverage run tests/test_all.py;
-    coveralls; 
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then
+    pytest --cov;
+    coveralls;
     fi
+

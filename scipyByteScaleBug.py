@@ -2,11 +2,13 @@
 """
 scipy
 """
+import numpy as np
+from typing import Union
 
-from numpy import uint8, cast, array
 
-
-def bytescale(data, cmin=None, cmax=None, high=255, low=0):
+def bytescale(data: np.ndarray,
+              cmin: Union[int, np.ndarray]=None, cmax: Union[int, np.ndarray]=None,
+              high: int=255, low: int=0) -> np.ndarray:
     """
     Byte scales an array (image).
     Byte scaling means converting the input image to uint8 dtype and scaling
@@ -47,7 +49,7 @@ def bytescale(data, cmin=None, cmax=None, high=255, low=0):
            [74, 81,  5],
            [52, 34, 28]], dtype=uint8)
     """
-    if data.dtype == uint8:
+    if data.dtype == np.uint8:
         return data
 
     if high < low:
@@ -55,6 +57,7 @@ def bytescale(data, cmin=None, cmax=None, high=255, low=0):
 
     if cmin is None:
         cmin = data.min()
+
     if cmax is None:
         cmax = data.max()
 
@@ -68,9 +71,10 @@ def bytescale(data, cmin=None, cmax=None, high=255, low=0):
     bytedata = (data * 1.0 - cmin) * scale + low
     bytedata[bytedata > high] = high
     bytedata[bytedata < low] = low
-    return cast[uint8](bytedata.round())
+
+    return np.cast[np.uint8](bytedata.round())
 
 
 if __name__ == '__main__':
-    assert bytescale(array([157]), 171, 255) == 0
-    assert bytescale(array([157], dtype='uint16'), 171, 255) == 0
+    assert bytescale(np.array([157]), 171, 255) == 0
+    assert bytescale(np.array([157], dtype='uint16'), 171, 255) == 0
