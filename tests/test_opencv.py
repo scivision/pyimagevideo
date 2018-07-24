@@ -20,7 +20,7 @@ def test_cv2codec_read():
     assert ret, 'could not open video'
     assert img.shape == (480, 720, 3), 'video not decoded properly'
 
-    cv2.imshow(fn.name, img)
+    cv2.imshow(f'OpenCV {cv2.__version__} {fn.name}', img)
     cv2.waitKey(delay=1000)
     cv2.destroyAllWindows()
 
