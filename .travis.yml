@@ -8,11 +8,11 @@ git:
   quiet: true
 
 python:
-  - 3.6
+- 3.6
 #  - 3.7  # waiting opencv etc. 3.7 
 
 os:
-  - linux
+- linux
       
 # Fake X11 server
 before_script:
@@ -24,13 +24,13 @@ before_script:
 install: pip install -e .[tests]
 
 script:
-  - pytest -sv
-  - flake8
-  - mypy . --ignore-missing-imports
+- pytest -rsv
+- flake8
+- mypy . --ignore-missing-imports
 
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then
-    pytest --cov;
-    coveralls;
-    fi
+- if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then
+  pytest --cov --cov-config=setup.cfg;
+  coveralls;
+  fi
 
