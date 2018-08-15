@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import tempfile
-import numpy as np
 import pytest
 from pathlib import Path
 import imageio
@@ -10,6 +9,8 @@ R = Path(__file__).parents[1]
 
 
 def test_tiff_multipage_rw():
+    pytest.importorskip('skimage')
+
     with tempfile.TemporaryDirectory() as d:
         d = Path(d).expanduser()
 
@@ -24,8 +25,8 @@ def test_tiff_multipage_rw():
 
 
 def test_wavelength2rgb():
-    np.testing.assert_allclose(piv.wavelength2rgb(720), (146, 0, 0))
+    assert piv.wavelength2rgb(720) == (146, 0, 0)
 
 
 if __name__ == '__main__':
-    pytest.main()
+    pytest.main(['-x', __file__])

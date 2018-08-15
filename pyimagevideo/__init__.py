@@ -1,15 +1,17 @@
-try:
-    import cv2
-except ImportError:
-    cv2 = None
-
 from contextlib import contextmanager
 import numpy as np
 from matplotlib.pyplot import figure, draw, close
 from pathlib import Path
 import imageio
-from skimage.transform import resize
 from typing import List, Tuple, Union
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+try:
+    from skimage.transform import resize
+except ImportError:
+    resize = None
 
 
 def wavelength2rgb(wavelength: float, gamma: float=0.8) -> Tuple[float, float, float]:
@@ -116,6 +118,9 @@ def png2tiff(ofn: Path, pat: str, indir: Path=None):
     worked best to have this perhaps ImageMagick duplicative functionality in
     Python/imageio/skimage.
     """
+    if resize is None:
+        raise ImportError('pip install scikit-image')
+
     ofn = Path(ofn).expanduser()
     indir = ofn.parent if indir is None else Path(indir).expanduser()
 # %% convert these sets of images to multipage image
