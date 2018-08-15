@@ -7,8 +7,9 @@ R = Path(__file__).parents[1]
 
 
 def test_rgbbgr():
+    pytest.importorskip('matplotlib')
     subprocess.check_call(['python', 'RGB_BGR_GBR_conv.py', '--noshow'], cwd=R)
 
 
 if __name__ == '__main__':
-    pytest.main()
+    pytest.main(['-x', __file__])

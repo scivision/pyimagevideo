@@ -8,12 +8,19 @@ Michael Hirsch
 from argparse import ArgumentParser
 import imageio
 import numpy as np
-from matplotlib.pyplot import subplots, show
+try:
+    from matplotlib.pyplot import figure, show
+except (ImportError, RuntimeError):
+    figure = show = None
 
 
 def plotimg(rgb: np.ndarray):
     """plot RGB, BGR, GBR"""
-    fg, ax = subplots(1, 3, figsize=(15, 4))
+    if figure is None:
+        return
+
+    fg = figure(figsize=(15, 4))
+    ax = fg.subplots(1, 3)
 
     ax[0].imshow(rgb, origin='upper')
     ax[0].set_title('RGB')
@@ -39,7 +46,7 @@ def main():
 
     plotimg(img)
 
-    if not P.noshow:
+    if show is not None and not P.noshow:
         show()
 
 

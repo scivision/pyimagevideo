@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 import pytest
 from pathlib import Path
-try:
-    import cv2
-except ImportError:
-    cv2 = None
 
 R = Path(__file__).parents[1]
 
 
-@pytest.mark.skipif(cv2 is None, reason='OpenCV not installed')
 def test_cv2codec_read():
+    cv2 = pytest.importorskip('cv2')
+
     fn = R / 'tests/star_collapse_out.avi'
     vid = cv2.VideoCapture(str(fn))
 
@@ -26,4 +23,4 @@ def test_cv2codec_read():
 
 
 if __name__ == '__main__':
-    pytest.main()
+    pytest.main(['-x', __file__])
