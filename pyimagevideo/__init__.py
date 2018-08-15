@@ -1,9 +1,12 @@
 from contextlib import contextmanager
 import numpy as np
-from matplotlib.pyplot import figure, draw, close
 from pathlib import Path
 import imageio
 from typing import List, Tuple, Union
+try:
+    from matplotlib.pyplot import figure, draw, close
+except (ImportError, RuntimeError):
+    figure = draw = close = None
 try:
     import cv2
 except ImportError:
@@ -83,6 +86,9 @@ def dialtone(fs: int=8000, T: float=1):
 
 
 def genimgseries(odir: Path) -> List[Path]:
+    if figure is None:
+        raise ImportError('pip install matplotlib')
+
     odir = Path(odir).expanduser()
 
     fg = figure(1, figsize=(0.5, 0.5))

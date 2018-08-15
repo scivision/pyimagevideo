@@ -10,6 +10,7 @@ R = Path(__file__).parents[1]
 
 def test_tiff_multipage_rw():
     pytest.importorskip('skimage')
+    pytest.importorskip('matplotlib')
 
     with tempfile.TemporaryDirectory() as d:
         d = Path(d).expanduser()
