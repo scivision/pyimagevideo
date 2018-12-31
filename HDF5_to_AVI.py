@@ -35,7 +35,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'FMP4' MPEG-4
 
 ** maybe works somewhat
-'THEO' ext='.ogv' #must name file .ogv, NOT .avi\  -- somewhat broken, per messages in ffplay
+'THEO' ext='.ogv' #must name file .ogv, NOT .avi  -- somewhat broken, per messages in ffplay
 
 *** NOT working for me on Ubuntu 16.04 ***
 'YV12'
@@ -51,7 +51,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 def hdf2avi(infn: Path, outfn: Path,
             h5key: str, cc4: str,
             mm=None, fps=None,
-            ptile=PTILE, step: int=1):
+            ptile=PTILE, step: int = 1):
     """
     infn: HDF5 file containing video to read
     outfn: video file
@@ -114,7 +114,7 @@ def hdf2avi(infn: Path, outfn: Path,
     h.release()
 
 
-def getprc(fn: Path, key: str, stride: int=60, ptile: List[float]=PTILE):
+def getprc(fn: Path, key: str, stride: int = 60, ptile: List[float] = PTILE):
     """ plot some file statistics to help decide min/max"""
     fn = Path(fn).expanduser()
     fGB = fn.stat().st_size / 1e9

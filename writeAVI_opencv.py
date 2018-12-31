@@ -29,7 +29,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'FMP4' MPEG-4
 
 ** maybe works somewhat
-'THEO' ext='.ogv' #must name file .ogv, NOT .avi\  -- somewhat broken, per messages in ffplay
+'THEO' ext='.ogv' #must name file .ogv, NOT .avi  -- somewhat broken, per messages in ffplay
 
 *** NOT work for me on Ubuntu 16.04 ***
 'YV12'

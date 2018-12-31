@@ -17,7 +17,7 @@ except ImportError:
     resize = None
 
 
-def wavelength2rgb(wavelength: float, gamma: float=0.8) -> Tuple[float, float, float]:
+def wavelength2rgb(wavelength: float, gamma: float = 0.8) -> Tuple[float, float, float]:
     '''
     http://www.noah.org/wiki/Wavelength_to_RGB_in_Python
 
@@ -70,14 +70,14 @@ def wavelength2rgb(wavelength: float, gamma: float=0.8) -> Tuple[float, float, f
     return R, G, B
 
 
-def tone(fs: int=8000, T: float=1, f0: float=1000) -> np.ndarray:
+def tone(fs: int = 8000, T: float = 1, f0: float = 1000) -> np.ndarray:
     """
     generate f0 Hz sinusoid for T seconds at fs S/s.
     """
     return np.sin(2 * np.pi * f0 * np.arange(0, T, 1 / fs))
 
 
-def dialtone(fs: int=8000, T: float=1):
+def dialtone(fs: int = 8000, T: float = 1):
     """
     generate North American dial tone
     https://en.wikipedia.org/wiki/Precise_Tone_Plan
@@ -114,7 +114,7 @@ def genimgseries(odir: Path) -> List[Path]:
     return flist
 
 
-def png2tiff(ofn: Path, pat: str, indir: Path=None):
+def png2tiff(ofn: Path, pat: str, indir: Path = None):
     """
     convert series of PNG, which may not be exactly the same shape,
     to a multipage TIFF (in the same directory)

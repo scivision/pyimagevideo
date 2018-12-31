@@ -3,10 +3,11 @@
 demo of measuring FPS performance with Matplotlib and OpenCV
 i.e. how fast can I update an image plot
 
-Eample with Python 3.5:
-$ python Demo_FPS_matplotlib_image.py
-matplotlib 1.5.1 average FPS 16.55  over 100 frames.
-OpenCV 3.1 average FPS 639.81  over 100 frames.
+Example:
+$ python FPS_matplotlib_image.py
+matplotlib 3.0.2 imshow average FPS 27.66  over 100 frames.
+matplotlib 3.0.2 pcolormesh average FPS 6.76  over 100 frames.
+OpenCV 3.4.3 average FPS 226.59  over 100 frames.
 
 Caveats:
 1) I compiled OpenCV with OpenCL--it's possible imshow is using the GPU on my laptop (not sure if imshow uses the GPU)
@@ -15,12 +16,15 @@ Caveats:
 
 It's just a very simple comparison, showing OpenCV's huge FPS advantage
 
+NOTE: we use pause(1e-3) as pause(1e-6) yields the same FPS, but doesn't give visible updates. A race condition in Matplotlib?
+
 """
-from numpy import uint8
+import numpy as np
 from numpy.random import rand
 import matplotlib
 from matplotlib.pyplot import figure, draw, pause, close
 from time import time
+from typing import Tuple
 try:
     import cv2
 except ImportError:
@@ -29,11 +33,14 @@ except ImportError:
 Nfps = 100
 
 
-def randomimg(xy):
-    return (rand(2, xy[0], xy[1]) * 255).astype(uint8)
+def randomimg(xy: Tuple[int, int]) -> np.ndarray:
+    """
+    generate two image frames to toggle between
+    """
+    return (rand(2, xy[0], xy[1]) * 255).astype(np.uint8)
 
 
-def fpsmatplotlib_imshow(dat):
+def fpsmatplotlib_imshow(dat: np.ndarray):
     fg = figure()
     ax = fg.gca()
     h = ax.imshow(dat[0, ...])
@@ -41,12 +48,12 @@ def fpsmatplotlib_imshow(dat):
     tic = time()
     for i in range(Nfps):
         h.set_data(dat[i % 2, ...])
-        draw(), pause(1e-6)
+        draw(), pause(1e-3)
     close(fg)
     return Nfps / (time() - tic)
 
 
-def fpsmatplotlib_pcolor(dat):
+def fpsmatplotlib_pcolor(dat: np.ndarray):
     fg = figure()
     ax = fg.gca()
     h = ax.pcolormesh(dat[0, ...])
@@ -55,12 +62,12 @@ def fpsmatplotlib_pcolor(dat):
     tic = time()
     for i in range(Nfps):
         h.set_array(dat[i % 2, ...].ravel())
-        draw(), pause(1e-6)
+        draw(), pause(1e-3)
     close(fg)
     return Nfps / (time() - tic)
 
 
-def fpsopencv(dat):
+def fpsopencv(dat: np.ndarray):
     tic = time()
     for i in range(Nfps):
         cv2.imshow('fpstest', dat[i % 2, ...])
@@ -81,8 +88,8 @@ if __name__ == '__main__':
     print(f'matplotlib {matplotlib.__version__} imshow average FPS {fpsmat:.2f}  over {Nfps} frames.')
 
     fpsmat = fpsmatplotlib_pcolor(dat)
-    print('matplotlib {matplotlib.__version__} pcolormesh average FPS {fpsmat:.2f}  over {Nfps} frames.')
+    print(f'matplotlib {matplotlib.__version__} pcolormesh average FPS {fpsmat:.2f}  over {Nfps} frames.')
 
     if cv2:
         fpscv = fpsopencv(dat)
-        print('OpenCV {cv2.__version__} average FPS {fpscv:.2f}  over {Nfps} frames.')
+        print(f'OpenCV {cv2.__version__} average FPS {fpscv:.2f}  over {Nfps} frames.')
