@@ -13,7 +13,7 @@ from . import png2tiff
 
 def hist2tif(odir: Path, inext: str):
     odir = Path(odir).expanduser()
-    pat = '(.*)_t\d+\\' + inext + '$'
+    pat = r'(.*)_t\d+\\' + inext + '$'
     logging.info(f'using regex {pat}')
     tlist = filterPick(odir.iterdir(), pat)
     logging.info(f'{len(tlist)} file types found in {odir}')

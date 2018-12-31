@@ -7,8 +7,8 @@ from typing import Union
 
 
 def bytescale(data: np.ndarray,
-              cmin: Union[int, np.ndarray]=None, cmax: Union[int, np.ndarray]=None,
-              high: int=255, low: int=0) -> np.ndarray:
+              cmin: Union[int, np.ndarray] = None, cmax: Union[int, np.ndarray] = None,
+              high: int = 255, low: int = 0) -> np.ndarray:
     """
     Byte scales an array (image).
     Byte scaling means converting the input image to uint8 dtype and scaling

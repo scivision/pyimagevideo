@@ -3,7 +3,6 @@
 [![AppVeyor CI](https://ci.appveyor.com/api/projects/status/b55xigknwgd8m0y7?svg=true)](https://ci.appveyor.com/project/scivision/pyimagevideo)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f9bdbab86e37a3680cfe/maintainability)](https://codeclimate.com/github/scivision/pyimagevideo/maintainability)
 [![pypi versions](https://img.shields.io/pypi/pyversions/pyimagevideo.svg)](https://pypi.python.org/pypi/pyimagevideo)
-[![pypi format](https://img.shields.io/pypi/format/pyimagevideo.svg)](https://pypi.python.org/pypi/pyimagevideo)
 [![PyPi Download stats](http://pepy.tech/badge/pyimagevideo)](http://pepy.tech/project/pyimagevideo)
 
 # Python Image and Video Read/Write Examples
@@ -13,7 +12,9 @@ Also includes functions to test Matlab and Python OpenCV codecs.
 
 ## Install
 
-    python -m pip install -e .
+```sh
+python -m pip install -e .
+```
 
 ## Scripts
 

@@ -1,36 +1,37 @@
 language: python
-sudo: required
-dist: xenial
 group: travis_latest
 
 git:
   depth: 3
   quiet: true
 
-python:
-- 3.6
-#  - 3.7  # waiting opencv etc. 3.7 
 
-os:
-- linux
-      
-# Fake X11 server
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
-
-
+matrix:
+  include:
+  - os: linux
+    python: 3.6
+    install: pip install -e .[tests,cov]
+    # Fake X11 server
+    before_script:
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 3 # give xvfb some time to start
+    script: 
+    - flake8
+    - mypy . --ignore-missing-imports
+    after_success:
+    - pytest --cov --cov-config=setup.cfg
+    - coveralls
+  - os: osx
+    language: sh
+    install: pip3 install -e .[tests]
+  - os: windows
+    language: sh
+    before_install:
+    - choco install python3
+    - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+    
 install: pip install -e .[tests]
 
-script:
-- pytest -rsv
-- flake8
-- mypy . --ignore-missing-imports
-
-after_success:
-- if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then
-  pytest --cov --cov-config=setup.cfg;
-  coveralls;
-  fi
+script: pytest -rsv
 
