@@ -8,8 +8,9 @@ Note: the isColor parameter of VideoWriter works on Linux!
 import subprocess
 import numpy as np
 import tempfile
+from pathlib import Path
 #
-from pyimagevideo import VideoWriter
+from pyimagevideo.videowriter import VideoWriter
 
 EXE = 'ffplay'  # path to your video player
 usecolor = False
@@ -45,9 +46,10 @@ shape = (nframe, ypix, xpix, 3) if usecolor else (nframe, ypix, xpix)
 
 vid = (np.random.random(shape) * 255).astype(np.uint8)
 # %% write lossless AVI
-with tempfile.NamedTemporaryFile(suffix=ext) as f:
-    with VideoWriter(f.name, CC4, (xpix, ypix), fps, usecolor) as hv:
-        for v in vid:
-            hv.write(v)
+fn = Path(tempfile.NamedTemporaryFile(suffix=ext, delete=False).name)  # Windows OK
 
-    subprocess.check_call([EXE, '-autoexit', f.name])
+with VideoWriter(fn, CC4, (xpix, ypix), fps, usecolor) as hv:
+    for v in vid:
+        hv.write(v)
+
+subprocess.check_call([EXE, '-autoexit', str(fn)])

@@ -1,16 +1,12 @@
-from contextlib import contextmanager
 import numpy as np
 from pathlib import Path
 import imageio
-from typing import List, Tuple, Union
+from typing import List, Tuple
 try:
     from matplotlib.pyplot import figure, draw, close
 except (ImportError, RuntimeError):
     figure = draw = close = None
-try:
-    import cv2
-except ImportError:
-    cv2 = None
+
 try:
     from skimage.transform import resize
 except ImportError:
@@ -141,27 +137,3 @@ def png2tiff(ofn: Path, pat: str, indir: Path = None):
         images[i, ...] = resize(im, im0.shape, mode='edge')  # they are all of slightly different shape
 
     imageio.mimwrite(ofn, images)
-
-
-@contextmanager
-def VideoWriter(ofn: Union[str, Path], cc4: str, xypix: tuple, fps: float, usecolor: bool):
-    """
-    inputs
-    ofn: string/Path output filename to write
-    fourcccode: string with four character fourcc code e.g. 'FFV1'
-    xypix: two-element tuple with x,y pixel count
-    usecolor: bool color or bw
-    """
-    if cv2 is None:
-        raise ImportError('OpenCV was not installed or loaded')
-
-    ncc4 = cv2.VideoWriter_fourcc(*cc4)
-
-    hv = cv2.VideoWriter(str(ofn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
-
-    if not hv or not hv.isOpened():
-        raise RuntimeError(f'trouble starting video {ofn}')
-
-    yield hv
-
-    hv.release()

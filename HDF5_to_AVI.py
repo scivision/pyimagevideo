@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 """
-Note: VideoWriter expects dimensions (x,y,3) and will fail otherwise,writing a tiny file perhaps
-Remember, VLC has a long-standing bug where files under about 3fps don't playback
+Notes:
 
-Note: the isColor parameter of VideoWriter works on Linux too
+* VideoWriter expects dimensions (x,y,3) and will fail otherwise, writing a tiny file perhaps
+* VLC has a long-standing bug where files under about 3fps don't playback
+* the isColor parameter of VideoWriter works on Linux too
 
 Example:
-./Convert_HDF5_to_AVI.py ~/data/2012-12-25/extracted.h5 -o ~/data/2012-12-25/ex.ogv -cc4 THEO
 
-Just get percentiles
-./Convert_HDF5_to_AVI.py ~/data/2012-12-25/extracted.h5
+    python HDF5_to_AVI.py extracted.h5 /tmp/out.avi
 
 """
 import sys
@@ -17,16 +16,18 @@ import logging
 from pathlib import Path
 import h5py
 import numpy as np
-from typing import List, Any
+from typing import Sequence
+from argparse import ArgumentParser
 # from scipy.misc import bytescale BUGS
 # from scipy.signal import wiener
 
 from histutils import sixteen2eight
-from pyimagevideo import VideoWriter
+from pyimagevideo.videowriter import VideoWriter
 sys.tracebacklimit = 1
 
 usecolor = False
 PTILE = [5, 99.95]
+SUFFIXES = ('.mkv', '.ogv', '.avi')
 """
 all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJPG' Motion JPEG
@@ -50,29 +51,37 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 
 def hdf2avi(infn: Path, outfn: Path,
             h5key: str, cc4: str,
-            mm=None, fps=None,
+            minmax: tuple = None, fps: float = None,
             ptile=PTILE, step: int = 1):
     """
-    infn: HDF5 file containing video to read
-    outfn: video file
-    h5key: HDF5 path to video. Assuming shape Nframe x Y x X x 3 (RGB color)  or Nframe x Y x X  (gray)
-    """
-    if h5key is None:
-        return
 
+    Parameters
+    ----------
+
+    infn: pathlib.Path
+        HDF5 file containing video to read
+    outfn: pathlib.Path
+        video file to write
+    h5key: str
+        HDF5 path to video. Assuming shape Nframe x Y x X x 3 (RGB color)  or Nframe x Y x X  (gray)
+    cc4: str
+        CC4 code of codec
+    minmax: tuple of int
+        min, max to scale contrast
+    """
     window = step * 100  # number of frames over which to auto contrast
 
     infn = Path(infn).expanduser()
     outfn = Path(outfn).expanduser()
 
-    assert infn.is_file(), f'{infn} is not a file'
-    assert outfn.suffix in ('.ogv', '.mkv', '.avi')
+    if outfn.suffix not in SUFFIXES:
+        raise ValueError(f'output filename should have suffix of {SUFFIXES}')
 
     if cc4 == 'THEO':
         assert outfn.suffix == '.ogv'
 
     if outfn.is_file():
-        raise IOError(f'video output {outfn} already exists.')
+        raise FileExistsError(outfn)
 # %% open HDF5 video for parameters
     with h5py.File(infn, 'r') as f:
         N, y, x = f[h5key].shape[:3]
@@ -80,10 +89,8 @@ def hdf2avi(infn: Path, outfn: Path,
         print(f'converting {Next} / {N} frames sized {x} x {y} from {infn} to {outfn}')
 # %% initialize OpenCV video writer
         if N < 100:
-            print(f'picking FPS=4, lossless codec FFV1 due to small amount Nframe {N}')
+            print(f'picking FPS=4 due to small amount Nframe {N}')
             fps = 4
-            outfn.with_suffix('.avi')
-            cc4 = 'FFV1'
             window = step * Next // 10
         elif fps is None:
             fps = 20
@@ -91,30 +98,28 @@ def hdf2avi(infn: Path, outfn: Path,
         if fps <= 3:
             logging.warning('FPS<=3 might not work with some AVI players e.g. VLC')
 
-        h: Any = VideoWriter(outfn, cc4, (x, y), fps, usecolor)
-# %% loop over HDF5 video
-        for i in range(0, N, step):
-            if not i % window:
-                if mm is None:
-                    minmax = np.percentile(f[h5key][i:i + window:step, :, :], ptile, interpolation='nearest')
-                else:
-                    minmax = mm
+        with VideoWriter(outfn, cc4, (x, y), fps, usecolor) as h:
+            # %% loop over HDF5 video
+            for i in range(0, N, step):
+                if not i % window:
+                    if minmax is None:
+                        minmax = np.percentile(f[h5key][i:i + window:step, :, :], ptile, interpolation='nearest')
 
-                if minmax[0] != minmax[1]:
-                    print(f'{i/N*100:.1f} %  min/max {minmax}\r', end="")
-                else:
-                    logging.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
+                    if minmax[0] != minmax[1]:
+                        print(f'{i/N*100:.1f} %  min/max {minmax}\r', end="")
+                    else:
+                        logging.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
 
-            im = f[h5key][i, :, :]
-            # I = wiener(I,wienernhood)
-            # img = bytescale(I, minmax[0], minmax[1]) BUG
-            img = sixteen2eight(im, minmax)
-            h.write(img)
-# %% close video
-    h.release()
+                im = f[h5key][i, :, :]
+                # I = wiener(I,wienernhood)
+                # img = bytescale(I, minmax[0], minmax[1]) BUG
+                img = sixteen2eight(im, minmax)
+
+                h.write(img)
 
 
-def getprc(fn: Path, key: str, stride: int = 60, ptile: List[float] = PTILE):
+def getprc(fn: Path, key: str, stride: int = 60,
+           ptile: Sequence[float] = PTILE):
     """ plot some file statistics to help decide min/max"""
     fn = Path(fn).expanduser()
     fGB = fn.stat().st_size / 1e9
@@ -126,7 +131,7 @@ def getprc(fn: Path, key: str, stride: int = 60, ptile: List[float] = PTILE):
     print(f'percentiles {ptile}:  {prc}')
 
 
-def findvidvar(fn: Path):
+def findvidvar(fn: Path) -> str:
     """
     assumes which variable is video in an HDF5 file
     by finding variable of larget size (number of elements) in an HDF5 file that's 3-D or 4-D
@@ -141,14 +146,11 @@ def findvidvar(fn: Path):
 
     vid = max(x, key=x.get)
     print(f'using "{vid}" as video variable in {fn}')
+
     return vid
 
 
 if __name__ == '__main__':
-    import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-    from argparse import ArgumentParser
     p = ArgumentParser()
     p.add_argument('infn', help='HDF5 video file to read')
     p.add_argument('outfn', help='video file to write e.g. cool.avi')
@@ -159,7 +161,7 @@ if __name__ == '__main__':
     p.add_argument('-s', '--step', help='take every Nth frame (default 1)', type=int, default=1)
     P = p.parse_args()
 
-    h5key = findvidvar(P.infn) if P.h5key is None else P.h5key
+    h5key = findvidvar(P.infn) if not P.h5key else P.h5key
 
     if not P.outfn:
         getprc(P.infn, h5key)
