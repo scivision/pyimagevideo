@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/30741849.svg)](https://zenodo.org/badge/latestdoi/30741849)
- ![Travis CI status](https://travis-ci.org/scivision/pyimagevideo.svg?branch=master)](https://travis-ci.org/scivision/pyimagevideo)
+[![Travis CI status](https://travis-ci.org/scivision/pyimagevideo.svg?branch=master)](https://travis-ci.org/scivision/pyimagevideo)
 [![coverage](https://coveralls.io/repos/github/scivision/pyimagevideo/badge.svg?branch=master)](https://coveralls.io/github/scivision/pyimagevideo?branch=master)
 [![AppVeyor CI](https://ci.appveyor.com/api/projects/status/b55xigknwgd8m0y7?svg=true)](https://ci.appveyor.com/project/scivision/pyimagevideo)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f9bdbab86e37a3680cfe/maintainability)](https://codeclimate.com/github/scivision/pyimagevideo/maintainability)
