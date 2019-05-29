@@ -13,6 +13,43 @@ except ImportError:
     resize = None
 
 
+def sixteen2eight(img: np.ndarray, Clim: Tuple[int, int]) -> np.ndarray:
+    """
+    stretch uint16 data to uint8 data e.g. images
+
+    Parameters
+    ----------
+
+    img: numpy.ndarray
+        2-D Numpy array of grayscale image data
+    Clim: tuple of int
+        lowest and highest expected values
+
+    """
+    # stretch to [0,255] as a float
+    Q = normframe(img, Clim) * 255
+
+    return Q.astype(np.uint8)  # convert to uint8
+
+
+def normframe(img: np.ndarray, Clim: Tuple[int, int]) -> np.ndarray:
+    """
+    Normalize array to [0, 1]
+
+    Parameters
+    ----------
+
+    img: numpy.ndarray
+        data to be normalized
+    Clim: tuple of int
+        lowest and highest expected values
+    """
+    Vmin = Clim[0]
+    Vmax = Clim[1]
+
+    return (img.astype(np.float32).clip(Vmin, Vmax) - Vmin) / (Vmax - Vmin)
+
+
 def wavelength2rgb(wavelength: float, gamma: float = 0.8) -> Tuple[float, float, float]:
     '''
     http://www.noah.org/wiki/Wavelength_to_RGB_in_Python

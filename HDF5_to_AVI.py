@@ -11,19 +11,16 @@ Example:
     python HDF5_to_AVI.py extracted.h5 /tmp/out.avi
 
 """
-import sys
 import logging
 from pathlib import Path
 import h5py
 import numpy as np
-from typing import Sequence
+from typing import Sequence, Tuple
 from argparse import ArgumentParser
-# from scipy.misc import bytescale BUGS
 # from scipy.signal import wiener
 
-from histutils import sixteen2eight
+from pyimagevideo import sixteen2eight
 from pyimagevideo.videowriter import VideoWriter
-sys.tracebacklimit = 1
 
 usecolor = False
 PTILE = [5, 99.95]
@@ -51,7 +48,7 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 
 def hdf2avi(infn: Path, outfn: Path,
             h5key: str, cc4: str,
-            minmax: tuple = None, fps: float = None,
+            minmax: Tuple[int, int] = None, fps: float = None,
             ptile=PTILE, step: int = 1):
     """
 
@@ -69,6 +66,7 @@ def hdf2avi(infn: Path, outfn: Path,
     minmax: tuple of int
         min, max to scale contrast
     """
+
     window = step * 100  # number of frames over which to auto contrast
 
     infn = Path(infn).expanduser()
@@ -111,8 +109,7 @@ def hdf2avi(infn: Path, outfn: Path,
                         logging.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
 
                 im = f[h5key][i, :, :]
-                # I = wiener(I,wienernhood)
-                # img = bytescale(I, minmax[0], minmax[1]) BUG
+                # im = wiener(im,wienernhood)
                 img = sixteen2eight(im, minmax)
 
                 h.write(img)
