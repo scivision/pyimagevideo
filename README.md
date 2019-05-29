@@ -1,4 +1,5 @@
- [![Travis CI status](https://travis-ci.org/scivision/pyimagevideo.svg?branch=master)](https://travis-ci.org/scivision/pyimagevideo)
+[![DOI](https://zenodo.org/badge/30741849.svg)](https://zenodo.org/badge/latestdoi/30741849)
+ ![Travis CI status](https://travis-ci.org/scivision/pyimagevideo.svg?branch=master)](https://travis-ci.org/scivision/pyimagevideo)
 [![coverage](https://coveralls.io/repos/github/scivision/pyimagevideo/badge.svg?branch=master)](https://coveralls.io/github/scivision/pyimagevideo?branch=master)
 [![AppVeyor CI](https://ci.appveyor.com/api/projects/status/b55xigknwgd8m0y7?svg=true)](https://ci.appveyor.com/project/scivision/pyimagevideo)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f9bdbab86e37a3680cfe/maintainability)](https://codeclimate.com/github/scivision/pyimagevideo/maintainability)
@@ -7,7 +8,7 @@
 
 # Python Image and Video Read/Write Examples
 
-Functions to **write multipage images** and **make videos** from Numpy arrays. 
+Functions to **write multipage images** and **make videos** from Numpy arrays.
 Also includes functions to test Matlab and Python OpenCV codecs.
 
 ## Install
@@ -19,9 +20,9 @@ python -m pip install -e .
 ## Scripts
 
 
-`Convert_HDF5_to_AVI.py` converts HDF5 video data to AVI. 
+[HDF5_to_AVI.py](./HDF5_to_AVI.py) converts HDF5 video data to AVI.
 Typically used in biomedical and science imaging, where they use HDF5 instead of TIFF,
-since HDF5 is a very widespread, fast file format that can store arbitrarily large datasets and metadata. 
+since HDF5 is a very widespread, fast file format that can store arbitrarily large datasets and metadata.
 It is recommended to researchers to use HDF5 instead of TIFF, FITS, CDF or proprietary
 formats for large data streams, including lossless video.
 
