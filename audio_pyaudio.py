@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Simplest demo of using PyAudio to playback audio from Python
-https://www.scivision.co/playing-sounds-from-numpy-arrays-in-python/
+https://www.scivision.dev/playing-sounds-from-numpy-arrays-in-python/
 
 requires libportaudio-dev
 

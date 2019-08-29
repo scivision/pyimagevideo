@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Simplest demo of using PySoundDevice to playback audio from Python
-https://www.scivision.co/playing-sounds-from-numpy-arrays-in-python/
+https://www.scivision.dev/playing-sounds-from-numpy-arrays-in-python/
 
 python -m pip install sounddevice
 

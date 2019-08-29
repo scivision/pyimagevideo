@@ -62,5 +62,5 @@ case, I have empirically found `ffmpeg_file` to Just Work.
 
 ## Notes
 
--   errors: `libfreeimage`, how to fix them: https://www.scivision.co/writing-multipage-tiff-with-python/
+-   errors: `libfreeimage`, how to fix them: https://www.scivision.dev/writing-multipage-tiff-with-python/
 
