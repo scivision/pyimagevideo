@@ -1,54 +1,50 @@
 #!/usr/bin/env python
 """
-demonstrate RGB,BGR, etc. conversions
-http://1zelda.com/tv/pics/rgb_test.jpg
+demonstrate RGB, BGR, etc. conversions using image from http://1zelda.com/tv/pics/rgb_test.jpg
 
-Michael Hirsch
+reference:
+https://www.scivision.dev/numpy-image-bgr-to-rgb/
 """
-from argparse import ArgumentParser
+from pathlib import Path
 import imageio
-import numpy as np
+import matplotlib
+from matplotlib.pyplot import figure, show
 try:
-    from matplotlib.pyplot import figure, show
-except (ImportError, RuntimeError):
-    figure = show = None
+    import cv2
+except ImportError:
+    cv2 = None
 
+# %% 0. read test file
+file = Path(__file__).parent / 'tests/rgb.png'
+rgb = imageio.imread(file)
 
-def plotimg(rgb: np.ndarray):
-    """plot RGB, BGR, GBR"""
-    if figure is None:
-        return
+# %% 1. show RGB, BGR, GBR in Matplotlib
+print("Matplotlib version", matplotlib.__version__)
+fg = figure(figsize=(15, 4))
+ax = fg.subplots(1, 3, sharey=True)
 
-    fg = figure(figsize=(15, 4))
-    ax = fg.subplots(1, 3)
+ax[0].imshow(rgb, origin='upper')
+ax[0].set_title('RGB')
 
-    ax[0].imshow(rgb, origin='upper')
-    ax[0].set_title('RGB')
+bgr = rgb[..., ::-1]
+ax[1].imshow(bgr, origin='upper')
+ax[1].set_title('BGR')
 
-    bgr = rgb[..., ::-1]
-    ax[1].imshow(bgr, origin='upper')
-    ax[1].set_title('BGR')
+gbr = rgb[..., [2, 0, 1]]
+ax[2].imshow(gbr, origin='upper')
+ax[2].set_title('GBR')
 
-    gbr = rgb[..., [2, 0, 1]]
-    ax[2].imshow(gbr, origin='upper')
-    ax[2].set_title('GBR')
+fg.suptitle(f"Color order top to bottom.   {file}")
+fg.tight_layout()
+show()
 
-    fg.suptitle("Color order top to bottom")
+# %% 2. show RGB, BGR, GBR in OpenCV HighGUI
+if cv2 is None:
+    raise SystemExit("OpenCV not available.")
 
+print("OpenCV version", cv2.__version__)
+cv2.imshow("RGB needs BGR array", bgr)
+cv2.imshow("BGR needs RGB array", rgb)
 
-def main():
-    p = ArgumentParser()
-    p.add_argument('--noshow', help='for self-test', action='store_true')
-    P = p.parse_args()
-
-    fn = 'tests/rgb.png'
-    img = imageio.imread(fn)
-
-    plotimg(img)
-
-    if show is not None and not P.noshow:
-        show()
-
-
-if __name__ == '__main__':
-    main()
+cv2.waitKey(delay=0)
+cv2.destroyAllWindows()

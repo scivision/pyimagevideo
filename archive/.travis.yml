@@ -31,4 +31,3 @@ matrix:
 install: pip install -e .[tests]
 
 script: pytest -rsv
-

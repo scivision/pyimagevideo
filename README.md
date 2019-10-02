@@ -1,8 +1,7 @@
 [![DOI](https://zenodo.org/badge/30741849.svg)](https://zenodo.org/badge/latestdoi/30741849)
-[![Travis CI status](https://travis-ci.org/scivision/pyimagevideo.svg?branch=master)](https://travis-ci.org/scivision/pyimagevideo)
-[![coverage](https://coveralls.io/repos/github/scivision/pyimagevideo/badge.svg?branch=master)](https://coveralls.io/github/scivision/pyimagevideo?branch=master)
-[![AppVeyor CI](https://ci.appveyor.com/api/projects/status/b55xigknwgd8m0y7?svg=true)](https://ci.appveyor.com/project/scivision/pyimagevideo)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f9bdbab86e37a3680cfe/maintainability)](https://codeclimate.com/github/scivision/pyimagevideo/maintainability)
+
+[![Actions Status](https://github.com/scivision/pyimagevideo/workflows/ci/badge.svg)](https://github.com/scivision/pyimagevideo/actions)
+
 [![pypi versions](https://img.shields.io/pypi/pyversions/pyimagevideo.svg)](https://pypi.python.org/pypi/pyimagevideo)
 [![PyPi Download stats](http://pepy.tech/badge/pyimagevideo)](http://pepy.tech/project/pyimagevideo)
 
@@ -62,5 +61,5 @@ case, I have empirically found `ffmpeg_file` to Just Work.
 
 ## Notes
 
--   errors: `libfreeimage`, how to fix them: https://www.scivision.dev/writing-multipage-tiff-with-python/
+* errors: `libfreeimage`, how to fix them: https://www.scivision.dev/writing-multipage-tiff-with-python/
 
