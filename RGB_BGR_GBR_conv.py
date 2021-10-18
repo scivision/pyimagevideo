@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 demonstrate RGB, BGR, etc. conversions using image from http://1zelda.com/tv/pics/rgb_test.jpg
 

@@ -6,9 +6,9 @@ import numpy as np
 from typing import Union
 
 
-def bytescale(data: np.ndarray,
-              cmin: Union[int, np.ndarray] = None, cmax: Union[int, np.ndarray] = None,
-              high: int = 255, low: int = 0) -> np.ndarray:
+def bytescale(
+    data: np.ndarray, cmin: Union[int, np.ndarray] = None, cmax: Union[int, np.ndarray] = None, high: int = 255, low: int = 0
+) -> np.ndarray:
     """
     Byte scales an array (image).
     Byte scaling means converting the input image to uint8 dtype and scaling
@@ -75,6 +75,6 @@ def bytescale(data: np.ndarray,
     return np.cast[np.uint8](bytedata.round())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     assert bytescale(np.array([157]), 171, 255) == 0
-    assert bytescale(np.array([157], dtype='uint16'), 171, 255) == 0
+    assert bytescale(np.array([157], dtype="uint16"), 171, 255) == 0

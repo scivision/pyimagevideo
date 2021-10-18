@@ -7,10 +7,10 @@ import cv2
 import logging
 import subprocess
 
-PATH = '~/Videos'
-pat = '*'
+PATH = "~/Videos"
+pat = "*"
 # %%
-print('OpenCV', cv2.__version__, 'loaded from', cv2.__file__)
+print("OpenCV", cv2.__version__, "loaded from", cv2.__file__)
 
 path = Path(PATH).expanduser()
 flist = path.glob(pat)
@@ -22,17 +22,17 @@ for fn in flist:
         continue
 
     try:
-        ret = subprocess.check_output(['ffprobe', '-show_streams', str(fn)],
-                                      stderr=subprocess.DEVNULL,
-                                      universal_newlines=True).split('\n')
-        ind = [i for i, elem in enumerate(ret) if 'codec_name' in elem]
-        codec = ret[ind[0]].split('=')[1]
+        ret = subprocess.check_output(
+            ["ffprobe", "-show_streams", str(fn)], stderr=subprocess.DEVNULL, universal_newlines=True
+        ).split("\n")
+        ind = [i for i, elem in enumerate(ret) if "codec_name" in elem]
+        codec = ret[ind[0]].split("=")[1]
     except (IndexError, subprocess.SubprocessError):
         codec = str(fn)
-# %%
+    # %%
     v = cv2.VideoCapture(str(fn))
     if not v.isOpened():
-        logging.error('unable to read {}'.format(fn))
+        logging.error("unable to read {}".format(fn))
         failed.append(codec)
         continue
     """
@@ -52,9 +52,9 @@ for fn in flist:
     cv2.destroyWindow(str(fn))
 # %%
 if passed:
-    print('passing codecs:')
-    print('\n'.join(passed))
+    print("passing codecs:")
+    print("\n".join(passed))
 
 if failed:
-    print('failed codecs:')
-    print('\n'.join(failed))
+    print("failed codecs:")
+    print("\n".join(failed))

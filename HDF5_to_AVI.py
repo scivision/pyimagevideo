@@ -17,6 +17,7 @@ import h5py
 import numpy as np
 from typing import Sequence, Tuple
 from argparse import ArgumentParser
+
 # from scipy.signal import wiener
 
 from pyimagevideo import sixteen2eight
@@ -24,7 +25,7 @@ from pyimagevideo.videowriter import VideoWriter
 
 usecolor = False
 PTILE = [5, 99.95]
-SUFFIXES = ('.mkv', '.ogv', '.avi')
+SUFFIXES = (".mkv", ".ogv", ".avi")
 """
 all of these codecs worked for me on Ubuntu 14.04 and 16.04
 'MJPG' Motion JPEG
@@ -46,10 +47,9 @@ all of these codecs worked for me on Ubuntu 14.04 and 16.04
 """
 
 
-def hdf2avi(infn: Path, outfn: Path,
-            h5key: str, cc4: str,
-            minmax: Tuple[int, int] = None, fps: float = None,
-            ptile=PTILE, step: int = 1):
+def hdf2avi(
+    infn: Path, outfn: Path, h5key: str, cc4: str, minmax: Tuple[int, int] = None, fps: float = None, ptile=PTILE, step: int = 1
+):
     """
 
     Parameters
@@ -73,40 +73,40 @@ def hdf2avi(infn: Path, outfn: Path,
     outfn = Path(outfn).expanduser()
 
     if outfn.suffix not in SUFFIXES:
-        raise ValueError(f'output filename should have suffix of {SUFFIXES}')
+        raise ValueError(f"output filename should have suffix of {SUFFIXES}")
 
-    if cc4 == 'THEO':
-        assert outfn.suffix == '.ogv'
+    if cc4 == "THEO":
+        assert outfn.suffix == ".ogv"
 
     if outfn.is_file():
         raise FileExistsError(outfn)
-# %% open HDF5 video for parameters
-    with h5py.File(infn, 'r') as f:
+    # %% open HDF5 video for parameters
+    with h5py.File(infn, "r") as f:
         N, y, x = f[h5key].shape[:3]
         Next = N // step
-        print(f'converting {Next} / {N} frames sized {x} x {y} from {infn} to {outfn}')
-# %% initialize OpenCV video writer
+        print(f"converting {Next} / {N} frames sized {x} x {y} from {infn} to {outfn}")
+        # %% initialize OpenCV video writer
         if N < 100:
-            print(f'picking FPS=4 due to small amount Nframe {N}')
+            print(f"picking FPS=4 due to small amount Nframe {N}")
             fps = 4
             window = step * Next // 10
         elif fps is None:
             fps = 20
 
         if fps <= 3:
-            logging.warning('FPS<=3 might not work with some AVI players e.g. VLC')
+            logging.warning("FPS<=3 might not work with some AVI players e.g. VLC")
 
         with VideoWriter(outfn, cc4, (x, y), fps, usecolor) as h:
             # %% loop over HDF5 video
             for i in range(0, N, step):
                 if not i % window:
                     if minmax is None:
-                        minmax = np.percentile(f[h5key][i:i + window:step, :, :], ptile, interpolation='nearest')
+                        minmax = np.percentile(f[h5key][i : i + window : step, :, :], ptile, interpolation="nearest")
 
                     if minmax[0] != minmax[1]:
-                        print(f'{i/N*100:.1f} %  min/max {minmax}\r', end="")
+                        print(f"{i/N*100:.1f} %  min/max {minmax}\r", end="")
                     else:
-                        logging.error(f'{i/N*100:.1f} %  Min==max no input image contrast')
+                        logging.error(f"{i/N*100:.1f} %  Min==max no input image contrast")
 
                 im = f[h5key][i, :, :]
                 # im = wiener(im,wienernhood)
@@ -115,17 +115,16 @@ def hdf2avi(infn: Path, outfn: Path,
                 h.write(img)
 
 
-def getprc(fn: Path, key: str, stride: int = 60,
-           ptile: Sequence[float] = PTILE):
-    """ plot some file statistics to help decide min/max"""
+def getprc(fn: Path, key: str, stride: int = 60, ptile: Sequence[float] = PTILE):
+    """plot some file statistics to help decide min/max"""
     fn = Path(fn).expanduser()
     fGB = fn.stat().st_size / 1e9
-    print(f'sampling {ptile} percentiles {fn}, reading {1/stride*fGB:.1f} of {fGB:.1f} GB')
+    print(f"sampling {ptile} percentiles {fn}, reading {1/stride*fGB:.1f} of {fGB:.1f} GB")
 
-    with h5py.File(fn, 'r') as f:
-        prc = np.percentile(f[key][::stride, ...], ptile, interpolation='nearest')
+    with h5py.File(fn, "r") as f:
+        prc = np.percentile(f[key][::stride, ...], ptile, interpolation="nearest")
 
-    print(f'percentiles {ptile}:  {prc}')
+    print(f"percentiles {ptile}:  {prc}")
 
 
 def findvidvar(fn: Path) -> str:
@@ -136,7 +135,7 @@ def findvidvar(fn: Path) -> str:
     fn = Path(fn).expanduser()
 
     x = {}
-    with h5py.File(fn, 'r') as f:
+    with h5py.File(fn, "r") as f:
         for v in f:
             if f[v].ndim in (3, 4):
                 x[v] = f[v].size
@@ -147,15 +146,15 @@ def findvidvar(fn: Path) -> str:
     return vid
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     p = ArgumentParser()
-    p.add_argument('infn', help='HDF5 video file to read')
-    p.add_argument('outfn', help='video file to write e.g. cool.avi')
-    p.add_argument('-k', '--h5key', help='key to HDF5 video (variable in HDF5 file)')
-    p.add_argument('-cc4', help='video codec CC4 code', default='FMP4')
-    p.add_argument('-minmax', help='minimum, maximum values. Automatic if not specified.')
-    p.add_argument('-fps', help='frames/sec of output video', type=int, default=None)
-    p.add_argument('-s', '--step', help='take every Nth frame (default 1)', type=int, default=1)
+    p.add_argument("infn", help="HDF5 video file to read")
+    p.add_argument("outfn", help="video file to write e.g. cool.avi")
+    p.add_argument("-k", "--h5key", help="key to HDF5 video (variable in HDF5 file)")
+    p.add_argument("-cc4", help="video codec CC4 code", default="FMP4")
+    p.add_argument("-minmax", help="minimum, maximum values. Automatic if not specified.")
+    p.add_argument("-fps", help="frames/sec of output video", type=int, default=None)
+    p.add_argument("-s", "--step", help="take every Nth frame (default 1)", type=int, default=1)
     P = p.parse_args()
 
     h5key = findvidvar(P.infn) if not P.h5key else P.h5key

@@ -1,7 +1,8 @@
+from __future__ import annotations
 import numpy as np
 from pathlib import Path
 import imageio
-from typing import List, Tuple
+
 try:
     from matplotlib.pyplot import figure, draw, close
 except (ImportError, RuntimeError):
@@ -13,7 +14,7 @@ except ImportError:
     resize = None
 
 
-def sixteen2eight(img: np.ndarray, Clim: Tuple[int, int]) -> np.ndarray:
+def sixteen2eight(img: np.ndarray, Clim: tuple[int, int]) -> np.ndarray:
     """
     stretch uint16 data to uint8 data e.g. images
 
@@ -32,7 +33,7 @@ def sixteen2eight(img: np.ndarray, Clim: Tuple[int, int]) -> np.ndarray:
     return Q.astype(np.uint8)  # convert to uint8
 
 
-def normframe(img: np.ndarray, Clim: Tuple[int, int]) -> np.ndarray:
+def normframe(img: np.ndarray, Clim: tuple[int, int]) -> np.ndarray:
     """
     Normalize array to [0, 1]
 
@@ -50,8 +51,8 @@ def normframe(img: np.ndarray, Clim: Tuple[int, int]) -> np.ndarray:
     return (img.astype(np.float32).clip(Vmin, Vmax) - Vmin) / (Vmax - Vmin)
 
 
-def wavelength2rgb(wavelength: float, gamma: float = 0.8) -> Tuple[float, float, float]:
-    '''
+def wavelength2rgb(wavelength: float, gamma: float = 0.8) -> tuple[float, float, float]:
+    """
     http://www.noah.org/wiki/Wavelength_to_RGB_in_Python
 
     This converts a given wavelength into an approximate RGB value.
@@ -60,39 +61,39 @@ def wavelength2rgb(wavelength: float, gamma: float = 0.8) -> Tuple[float, float,
 
     Based on code by Dan Bruton
     http://www.physics.sfasu.edu/astro/color/spectra.html
-    '''
+    """
 
     wavelength = float(wavelength)
-    if 440. >= wavelength >= 380.:
+    if 440.0 >= wavelength >= 380.0:
         attenuation = 0.3 + 0.7 * (wavelength - 380) / (440 - 380)
         R = ((-(wavelength - 440) / (440 - 380)) * attenuation) ** gamma
-        G = 0.
-        B = (1. * attenuation) ** gamma
+        G = 0.0
+        B = (1.0 * attenuation) ** gamma
     elif wavelength >= 440 and wavelength <= 490:
         R = 0.0
         G = ((wavelength - 440) / (490 - 440)) ** gamma
-        B = 1.
+        B = 1.0
     elif wavelength >= 490 and wavelength <= 510:
-        R = 0.
-        G = 1.
+        R = 0.0
+        G = 1.0
         B = (-(wavelength - 510) / (510 - 490)) ** gamma
     elif wavelength >= 510 and wavelength <= 580:
         R = ((wavelength - 510) / (580 - 510)) ** gamma
-        G = 1.
-        B = 0.
+        G = 1.0
+        B = 0.0
     elif wavelength >= 580 and wavelength <= 645:
         R = 1.0
         G = (-(wavelength - 645) / (645 - 580)) ** gamma
-        B = 0.
+        B = 0.0
     elif wavelength >= 645 and wavelength <= 750:
         attenuation = 0.3 + 0.7 * (750 - wavelength) / (750 - 645)
         R = (1.0 * attenuation) ** gamma
-        G = 0.
-        B = 0.
+        G = 0.0
+        B = 0.0
     else:
-        R = 0.
-        G = 0.
-        B = 0.
+        R = 0.0
+        G = 0.0
+        B = 0.0
 
     R = int(R * 255)
     G = int(G * 255)
@@ -118,9 +119,9 @@ def dialtone(fs: int = 8000, T: float = 1):
     return 0.5 * (tone(fs, T, 440) + tone(fs, T, 350))
 
 
-def genimgseries(odir: Path) -> List[Path]:
+def genimgseries(odir: Path) -> list[Path]:
     if figure is None:
-        raise ImportError('pip install matplotlib')
+        raise ImportError("pip install matplotlib")
 
     odir = Path(odir).expanduser()
 
@@ -131,16 +132,16 @@ def genimgseries(odir: Path) -> List[Path]:
     flist = []
     for i in range(10):
         ax.clear()
-        ax.axis('off')
+        ax.axis("off")
 
         ax.text(0, 0, i, fontsize=36)
 
         draw()
 
-        fn = odir / f'{i}.png'
+        fn = odir / f"{i}.png"
         flist.append(fn)
 
-        fg.savefig(fn, bbox_inches='tight', pad_inches=0)
+        fg.savefig(fn, bbox_inches="tight", pad_inches=0)
 
     close(fg)
 
@@ -158,19 +159,19 @@ def png2tiff(ofn: Path, pat: str, indir: Path = None):
     Python/imageio/skimage.
     """
     if resize is None:
-        raise ImportError('pip install scikit-image')
+        raise ImportError("pip install scikit-image")
 
     ofn = Path(ofn).expanduser()
     indir = ofn.parent if indir is None else Path(indir).expanduser()
-# %% convert these sets of images to multipage image
+    # %% convert these sets of images to multipage image
     flist = sorted(indir.glob(pat))  # yes, sorted()
     if not flist:
-        raise FileNotFoundError('found no files with {pat} in {ofn}')
+        raise FileNotFoundError("found no files with {pat} in {ofn}")
 
     im0 = imageio.imread(flist[0])  # priming read
     images = np.empty((len(flist), *im0.shape), dtype=im0.dtype)
     for i, f in enumerate(flist):
         im = imageio.imread(f)
-        images[i, ...] = resize(im, im0.shape, mode='edge')  # they are all of slightly different shape
+        images[i, ...] = resize(im, im0.shape, mode="edge")  # they are all of slightly different shape
 
     imageio.mimwrite(ofn, images)

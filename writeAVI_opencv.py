@@ -9,16 +9,17 @@ import subprocess
 import numpy as np
 import tempfile
 from pathlib import Path
+
 #
 from pyimagevideo.videowriter import VideoWriter
 
-EXE = 'ffplay'  # path to your video player
+EXE = "ffplay"  # path to your video player
 usecolor = False
 nframe = 30
 xpix = ypix = 256
 
-ext = '.avi'
-CC4 = 'FMP4'
+ext = ".avi"
+CC4 = "FMP4"
 fps = 10
 # TODO MPG4
 
@@ -52,4 +53,4 @@ with VideoWriter(fn, CC4, (xpix, ypix), fps, usecolor) as hv:
     for v in vid:
         hv.write(v)
 
-subprocess.check_call([EXE, '-autoexit', str(fn)])
+subprocess.check_call([EXE, "-autoexit", str(fn)])

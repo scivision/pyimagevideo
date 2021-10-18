@@ -15,7 +15,8 @@ mpeg4: lossy
 """
 from numpy.random import uniform
 import matplotlib
-matplotlib.use('agg')  # invisible while plotting, but faster and more robust
+
+matplotlib.use("agg")  # invisible while plotting, but faster and more robust
 from matplotlib.pyplot import figure, draw, pause, close  # noqa: E402
 import matplotlib.animation as anim  # noqa: E402
 
@@ -25,7 +26,7 @@ DPI = 100
 X = Y = 128
 N = 50
 FPS = 15  # keep greater than 3 to avoid VLC playback bug
-WRITER = 'ffmpeg_file'
+WRITER = "ffmpeg_file"
 
 
 def testdata(x, y, N):
@@ -33,27 +34,27 @@ def testdata(x, y, N):
     return uniform(size=(N, y, x))
 
 
-def setupfig(img, title=''):
+def setupfig(img, title=""):
     # %% boilerplate for making imshow priming (used in any program)
-    assert img.ndim == 2, '2-D image expected'
+    assert img.ndim == 2, "2-D image expected"
     fg = figure()
     ax = fg.gca()
     h = ax.imshow(img)  # prime figure with first frame of data
-    ax.set_title(title, color='g')
+    ax.set_title(title, color="g")
     return fg, h
 
 
 def loop(fg, h, w, fn, imgs):
-    assert imgs.ndim in (3, 4), 'assuming image stack iterating over first dimension Nframe x X x Y [x RGB]'
+    assert imgs.ndim in (3, 4), "assuming image stack iterating over first dimension Nframe x X x Y [x RGB]"
 
     with w.saving(fg, fn, DPI):
-        print('writing', fn)
-        for I in imgs:
-            h.set_data(I)
+        print("writing", fn)
+        for img in imgs:
+            h.set_data(img)
             draw()
             # NOTE: pause is NEEDED for more complicated plots, to avoid random crashes
             pause(0.01)
-            w.grab_frame(facecolor='k')
+            w.grab_frame(facecolor="k")
 
     close(fg)
 
@@ -63,13 +64,13 @@ def config(h, codec):
     return Writer(fps=FPS, codec=codec, bitrate=BITRATE)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     imgs = testdata(X, Y, N)
-# %% lossless
-    fg, h = setupfig(imgs[0], 'lossless')
-    w = config(h, 'ffv1')
-    loop(fg, h, w, 'lossless.avi', imgs)
-# %% lossy
-    fg, h = setupfig(imgs[0], 'lossy')
-    w = config(h, 'mpeg4')
-    loop(fg, h, w, 'lossy.avi', imgs)
+    # %% lossless
+    fg, h = setupfig(imgs[0], "lossless")
+    w = config(h, "ffv1")
+    loop(fg, h, w, "lossless.avi", imgs)
+    # %% lossy
+    fg, h = setupfig(imgs[0], "lossy")
+    w = config(h, "mpeg4")
+    loop(fg, h, w, "lossy.avi", imgs)

@@ -9,6 +9,7 @@ I don't use PortAudio as it conflicts with WINE.
 """
 import numpy as np
 import pyaudio
+
 #
 from pyimagevideo import tone
 

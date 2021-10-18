@@ -1,23 +1,15 @@
-[![DOI](https://zenodo.org/badge/30741849.svg)](https://zenodo.org/badge/latestdoi/30741849)
-
-[![Actions Status](https://github.com/scivision/pyimagevideo/workflows/ci/badge.svg)](https://github.com/scivision/pyimagevideo/actions)
-
-[![pypi versions](https://img.shields.io/pypi/pyversions/pyimagevideo.svg)](https://pypi.python.org/pypi/pyimagevideo)
-[![PyPi Download stats](http://pepy.tech/badge/pyimagevideo)](http://pepy.tech/project/pyimagevideo)
-
 # Python Image and Video Read/Write Examples
+
+[![DOI](https://zenodo.org/badge/30741849.svg)](https://zenodo.org/badge/latestdoi/30741849)
+[![Actions Status](https://github.com/scivision/pyimagevideo/workflows/ci/badge.svg)](https://github.com/scivision/pyimagevideo/actions)
+[![PyPi Download stats](http://pepy.tech/badge/pyimagevideo)](http://pepy.tech/project/pyimagevideo)
 
 Functions to **write multipage images** and **make videos** from Numpy arrays.
 Also includes functions to test Matlab and Python OpenCV codecs.
 
-## Install
-
 ```sh
 python -m pip install -e .
 ```
-
-## Scripts
-
 
 [HDF5_to_AVI.py](./HDF5_to_AVI.py) converts HDF5 video data to AVI.
 Typically used in biomedical and science imaging, where they use HDF5 instead of TIFF,
@@ -62,4 +54,3 @@ case, I have empirically found `ffmpeg_file` to Just Work.
 ## Notes
 
 * errors: `libfreeimage`, how to fix them: https://www.scivision.dev/writing-multipage-tiff-with-python/
-

@@ -3,22 +3,24 @@ import tempfile
 import pytest
 from pathlib import Path
 import imageio
+
 #
 import pyimagevideo as piv
+
 R = Path(__file__).parents[1]
 
 
 def test_tiff_multipage_rw():
-    pytest.importorskip('skimage')
-    pytest.importorskip('matplotlib')
+    pytest.importorskip("skimage")
+    pytest.importorskip("matplotlib")
 
     with tempfile.TemporaryDirectory() as d:
         d = Path(d).expanduser()
 
         piv.genimgseries(d)
 
-        ofn = d / 'mp.tif'
-        piv.png2tiff(ofn, '[0-9].png')
+        ofn = d / "mp.tif"
+        piv.png2tiff(ofn, "[0-9].png")
 
         y = imageio.mimread(ofn)
 
@@ -29,5 +31,5 @@ def test_wavelength2rgb():
     assert piv.wavelength2rgb(720) == (146, 0, 0)
 
 
-if __name__ == '__main__':
-    pytest.main(['-x', __file__])
+if __name__ == "__main__":
+    pytest.main(["-x", __file__])

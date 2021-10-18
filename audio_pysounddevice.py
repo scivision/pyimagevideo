@@ -14,7 +14,7 @@ from pyimagevideo import dialtone
 fs = 8000  # Hz
 T = 1
 
-x = (dialtone(fs, T) * 32768).astype('int16')  # scale to int16 for sound card
+x = (dialtone(fs, T) * 32768).astype("int16")  # scale to int16 for sound card
 
 sounddevice.play(x, fs)  # releases GIL
 

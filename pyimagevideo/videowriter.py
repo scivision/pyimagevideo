@@ -23,7 +23,7 @@ def VideoWriter(fn: Path, cc4: str, xypix: tuple, fps: float, usecolor: bool):
     hv = cv2.VideoWriter(str(fn), ncc4, fps=fps, frameSize=xypix, isColor=usecolor)
 
     if not hv or not hv.isOpened():
-        raise RuntimeError(f'trouble starting video {fn}')
+        raise RuntimeError(f"trouble starting video {fn}")
 
     yield hv
 

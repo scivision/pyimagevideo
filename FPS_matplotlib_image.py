@@ -25,6 +25,7 @@ import matplotlib
 from matplotlib.pyplot import figure, draw, pause, close
 from time import time
 from typing import Tuple
+
 try:
     import cv2
 except ImportError:
@@ -44,7 +45,7 @@ def fpsmatplotlib_imshow(dat: np.ndarray):
     fg = figure()
     ax = fg.gca()
     h = ax.imshow(dat[0, ...])
-    ax.set_title('imshow')
+    ax.set_title("imshow")
     tic = time()
     for i in range(Nfps):
         h.set_data(dat[i % 2, ...])
@@ -57,7 +58,7 @@ def fpsmatplotlib_pcolor(dat: np.ndarray):
     fg = figure()
     ax = fg.gca()
     h = ax.pcolormesh(dat[0, ...])
-    ax.set_title('pcolormesh')
+    ax.set_title("pcolormesh")
     ax.autoscale(True, tight=True)
     tic = time()
     for i in range(Nfps):
@@ -70,26 +71,27 @@ def fpsmatplotlib_pcolor(dat: np.ndarray):
 def fpsopencv(dat: np.ndarray):
     tic = time()
     for i in range(Nfps):
-        cv2.imshow('fpstest', dat[i % 2, ...])
+        cv2.imshow("fpstest", dat[i % 2, ...])
         cv2.waitKey(1)  # integer milliseconds, 0 makes wait forever
     cv2.destroyAllWindows()
     return Nfps / (time() - tic)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from argparse import ArgumentParser
-    p = ArgumentParser(description='measure FPS for rapidly updating plot with Matplotlib vs. OpenCV')
-    p.add_argument('-p', '--xypixels', help='number of pixels for x and y', type=int, default=(512, 512))
+
+    p = ArgumentParser(description="measure FPS for rapidly updating plot with Matplotlib vs. OpenCV")
+    p.add_argument("-p", "--xypixels", help="number of pixels for x and y", type=int, default=(512, 512))
     P = p.parse_args()
 
     dat = randomimg(P.xypixels)
 
     fpsmat = fpsmatplotlib_imshow(dat)
-    print(f'matplotlib {matplotlib.__version__} imshow average FPS {fpsmat:.2f}  over {Nfps} frames.')
+    print(f"matplotlib {matplotlib.__version__} imshow average FPS {fpsmat:.2f}  over {Nfps} frames.")
 
     fpsmat = fpsmatplotlib_pcolor(dat)
-    print(f'matplotlib {matplotlib.__version__} pcolormesh average FPS {fpsmat:.2f}  over {Nfps} frames.')
+    print(f"matplotlib {matplotlib.__version__} pcolormesh average FPS {fpsmat:.2f}  over {Nfps} frames.")
 
     if cv2:
         fpscv = fpsopencv(dat)
-        print(f'OpenCV {cv2.__version__} average FPS {fpscv:.2f}  over {Nfps} frames.')
+        print(f"OpenCV {cv2.__version__} average FPS {fpscv:.2f}  over {Nfps} frames.")

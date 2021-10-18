@@ -14,10 +14,10 @@ def testreadavi(fn: Path):
 
     vid = imageio.mimread(fn)
 
-# %% play video
+    # %% play video
     ax = figure().gca()
     h = ax.imshow(vid[0])
-    t = ax.set_title('')
+    t = ax.set_title("")
 
     for i, I in enumerate(vid):
         h.set_data(I)
@@ -27,10 +27,11 @@ def testreadavi(fn: Path):
         pause(0.1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from argparse import ArgumentParser
-    p = ArgumentParser(description='tests OpenCV codec reading of AVI, and displays first frame of file')
-    p.add_argument('avifn', help='.avi file you want to read')
+
+    p = ArgumentParser(description="tests OpenCV codec reading of AVI, and displays first frame of file")
+    p.add_argument("avifn", help=".avi file you want to read")
     P = p.parse_args()
 
     testreadavi(P.avifn)

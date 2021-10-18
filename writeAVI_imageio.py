@@ -12,15 +12,15 @@ import tempfile
 import imageio
 import shutil
 
-EXE = shutil.which('ffplay')  # path to your video player
+EXE = shutil.which("ffplay")  # path to your video player
 if not EXE:
-    raise FileNotFoundError('FFplay was not found')
+    raise FileNotFoundError("FFplay was not found")
 
 usecolor = False
 nframe = 30
 xpix = ypix = 256
 
-ext = '.avi'
+ext = ".avi"
 fps = 10
 
 # %% generate noise signal
@@ -31,4 +31,4 @@ vid = (np.random.random(shape) * 255).astype(np.uint8)
 fn = tempfile.NamedTemporaryFile(suffix=ext, delete=False).name
 imageio.mimwrite(fn, vid)
 # %% check video
-subprocess.check_call([EXE, '-autoexit', fn])
+subprocess.check_call([EXE, "-autoexit", fn])
