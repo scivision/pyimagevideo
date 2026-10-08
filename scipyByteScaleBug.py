@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 scipy
 """
-from __future__ import annotations
+
 import numpy as np
 
 

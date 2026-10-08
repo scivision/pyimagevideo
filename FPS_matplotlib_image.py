@@ -19,7 +19,7 @@ It's just a very simple comparison, showing OpenCV's huge FPS advantage
 NOTE: we use pause(1e-3) as pause(1e-6) yields the same FPS, but doesn't give visible updates. A race condition in Matplotlib?
 
 """
-from __future__ import annotations
+
 import numpy as np
 from numpy.random import rand
 import matplotlib

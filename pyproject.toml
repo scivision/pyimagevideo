@@ -7,7 +7,7 @@ name = "pyimagevideo"
 version = "1.0.1"
 description = "Demos of OpenCV, read/write videos, etc."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["video", "audio", "media", "ffmpeg"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -27,7 +27,7 @@ classifiers = [
 dependencies = ["numpy", "imageio", "scikit-image", "matplotlib"]
 
 [project.optional-dependencies]
-tests = ["pytest", "flake8", "mypy"]
+tests = ["pytest", "mypy"]
 io = ["h5py", "scipy", "morecvutils"]
 
 

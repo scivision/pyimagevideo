@@ -2,7 +2,6 @@
 These functions are for https://github.com/scivision/histfeas output plot collection
 """
 
-from __future__ import annotations
 import logging
 from pathlib import Path
 import re

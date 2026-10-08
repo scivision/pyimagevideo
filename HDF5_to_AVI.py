@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Notes:
 
@@ -11,7 +11,7 @@ Example:
     python HDF5_to_AVI.py extracted.h5 /tmp/out.avi
 
 """
-from __future__ import annotations
+
 import logging
 from pathlib import Path
 import h5py

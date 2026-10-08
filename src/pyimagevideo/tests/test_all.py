@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-import tempfile
 import pytest
 from pathlib import Path
 import imageio
@@ -12,19 +10,18 @@ import pyimagevideo.gen_image as pimg
 R = Path(__file__).parents[1]
 
 
-def test_tiff_multipage_rw():
+def test_tiff_multipage_rw(tmp_path):
     pytest.importorskip("skimage")
     pytest.importorskip("matplotlib")
 
-    with tempfile.TemporaryDirectory() as d:
-        d = Path(d).expanduser()
+    d = tmp_path.expanduser()
 
-        pimg.genimgseries(d)
+    pimg.genimgseries(d)
 
-        ofn = d / "mp.tif"
-        pivc.png2tiff(ofn, "[0-9].png")
+    ofn = d / "mp.tif"
+    pivc.png2tiff(ofn, "[0-9].png")
 
-        y = imageio.mimread(ofn)
+    y = imageio.mimread(ofn)
 
     assert len(y) == 10
 
